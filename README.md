@@ -1,5 +1,11 @@
 # SWException EML-BE
 
+## Git clone
+
+`git clone --recurse-submodules -j8 git@github.com:SWException/eml-be-services.git`
+
+Clona la repo e anche tutti i submodules. `-j8` esegue il clone in parallelo fino a 8 submodules alla volta.
+
 ## Update submodules
 
 `git submodule update --remote`
