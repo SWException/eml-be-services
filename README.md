@@ -1,5 +1,9 @@
 # SWException EML-BE
 
+## Update submodules
+
+`git submodule update --remote`
+
 ## Serverless deploy
 
 `./serverlessDeploy.sh [ --install ] [[ --aws-profile | --profile ] PROFILE_NAME ]`
@@ -12,4 +16,3 @@
 `./buildOpenAPI.sh [ --install ]`
 
  - ***--install***: installa swagger-cli
-
