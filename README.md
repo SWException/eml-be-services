@@ -8,6 +8,7 @@
 
 `./serverlessDeploy.sh [ --install ] [[ --aws-profile | --profile ] PROFILE_NAME ]`
 
+Esegue il deploy di ogni submodules. È possibile specificare le seguenti opzioni:
  - ***--install***: esegue npm install in ogni submodule
  - ***[ --aws-profile | --profile ] PROFILE_NAME***: esegue serverless deploy con il profilo PROFILE_NAME in ogni submodule
 
@@ -15,4 +16,5 @@
 
 `./buildOpenAPI.sh [ --install ]`
 
+Genera un unico file openapi.yml in \_build/openapi.yml. È possibile specificare le seguenti opzioni:
  - ***--install***: installa swagger-cli
