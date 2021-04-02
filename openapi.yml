@@ -2,11 +2,11 @@ openapi: 3.0.3
 info:
   title: EmporioLambda BE
   description: Queste sono le OpenAPI per EmporioLambda
-  version: 0.1.0
+  version: 0.3.0
 servers:
   # Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.1.0
+    url: https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0
   - description: serverless offline
     url: http://localhost:4000/dev/
 paths:
@@ -36,7 +36,9 @@ paths:
     $ref: "addresses/openapi/addressesByID.yml"
 
   /checkout:
-    $ref: "checkout/openapi/checkout.yml"
+    $ref: "orders/openapi/checkout.yml"
+  /checkout/{intent-id}:
+    $ref: "orders/openapi/checkoutByID.yml"
   
   /orders:
     $ref: "orders/openapi/orders.yml"
@@ -49,13 +51,23 @@ paths:
     $ref: "users/openapi/customers.yml"
   /users/customers/{username}:
     $ref: "users/openapi/customersByID.yml"
+  /users/customers/check/{token}:
+    $ref: "users/openapi/checkUserJWT.yml"
+  /users/vendors/check/{token}:
+    $ref: "users/openapi/checkUserJWT.yml"
 
 tags:
+  - name: categories
+    description: "API for categories"
+
   - name: products
     description: "API for products"
 
-  - name: categories
-    description: "API for categories"
+  - name: taxes
+    description: "API for taxes"
+
+  - name: cart
+    description: "API for cart"
 
   - name: addresses
     description: "API for addresses"
@@ -63,14 +75,8 @@ tags:
   - name: checkout
     description: "API for checkout"
 
-  - name: cart
-    description: "API for cart"
-
-  - name: taxes
-    description: "API for taxes"
+  - name: orders
+    description: "API for orders"
 
   - name: users
     description: "API for users"
-
-  - name: orders
-    description: "API for orders"

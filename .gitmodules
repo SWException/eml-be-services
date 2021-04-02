@@ -5,28 +5,24 @@
 [submodule "orders"]
 	path = orders
 	url = git@github.com:SWException/orders.git
-    branch = main
+    branch = develop
 [submodule "users"]
 	path = users
 	url = git@github.com:SWException/users.git
     branch = develop
-[submodule "checkout"]
-	path = checkout
-	url = git@github.com:SWException/checkout.git
-    branch = develop
 [submodule "products"]
 	path = products
 	url = git@github.com:SWException/products.git
-    branch = main
+    branch = develop
 [submodule "addresses"]
 	path = addresses
 	url = git@github.com:SWException/addresses.git
-    branch = main
+    branch = develop
 [submodule "carts"]
 	path = carts
 	url = git@github.com:SWException/carts.git
-    branch = main
+    branch = develop
 [submodule "taxes"]
 	path = taxes
 	url = git@github.com:SWException/taxes.git
-    branch = main
+    branch = develop
