@@ -691,35 +691,47 @@
     var defs = {}
             defs["body"] = {
   "allOf" : [ {
-    "required" : [ "categoryName" ],
+    "required" : [ "name" ],
     "type" : "object",
     "properties" : {
       "id" : {
         "type" : "string"
       },
-      "categoryName" : {
+      "name" : {
         "type" : "string"
       }
     }
   }, {
-    "required" : [ "categoryName" ]
+    "required" : [ "name" ]
   } ]
 };
             defs["body_1"] = {
   "allOf" : [ {
-    "required" : [ "categoryName" ],
+    "required" : [ "name" ],
     "type" : "object",
     "properties" : {
       "id" : {
         "type" : "string"
       },
-      "categoryName" : {
+      "name" : {
         "type" : "string"
       }
     }
   }, {
-    "required" : [ "categoryName", "id" ]
+    "required" : [ "id", "name" ]
   } ]
+};
+            defs["body_10"] = {
+  "required" : [ "billingAddress", "shippingAddress" ],
+  "type" : "object",
+  "properties" : {
+    "shippingAddress" : {
+      "type" : "string"
+    },
+    "billingAddress" : {
+      "type" : "string"
+    }
+  }
 };
             defs["body_2"] = {
   "allOf" : [ {
@@ -739,7 +751,11 @@
         "minLength" : 1,
         "type" : "string"
       },
-      "images" : {
+      "primaryPhoto" : {
+        "minLength" : 1,
+        "type" : "string"
+      },
+      "secondaryPhotos" : {
         "maxItems" : 4,
         "uniqueItems" : true,
         "type" : "array",
@@ -762,8 +778,7 @@
         "format" : "float"
       },
       "tax" : {
-        "type" : "number",
-        "format" : "int64"
+        "type" : "number"
       },
       "show" : {
         "type" : "boolean"
@@ -799,7 +814,11 @@
         "minLength" : 1,
         "type" : "string"
       },
-      "images" : {
+      "primaryPhoto" : {
+        "minLength" : 1,
+        "type" : "string"
+      },
+      "secondaryPhotos" : {
         "maxItems" : 4,
         "uniqueItems" : true,
         "type" : "array",
@@ -822,8 +841,7 @@
         "format" : "float"
       },
       "tax" : {
-        "type" : "number",
-        "format" : "int64"
+        "type" : "number"
       },
       "show" : {
         "type" : "boolean"
@@ -875,64 +893,35 @@
         "type" : "string"
       }
     }
-  }, {
-    "required" : [ "id" ]
   } ]
 };
             defs["body_6"] = {
-  "required" : [ "quantity" ],
+  "required" : [ "productId", "quantity" ],
   "type" : "object",
   "properties" : {
-    "id" : {
+    "productId" : {
       "minLength" : 1,
       "type" : "string"
     },
     "quantity" : {
       "minimum" : 1,
-      "type" : "integer"
+      "type" : "number"
     }
   }
 };
             defs["body_7"] = {
-  "allOf" : [ {
-    "type" : "object",
-    "properties" : {
-      "id" : {
-        "type" : "string"
-      },
-      "user" : {
-        "type" : "string"
-      },
-      "description" : {
-        "type" : "string"
-      },
-      "recipientName" : {
-        "type" : "string"
-      },
-      "recipientSurname" : {
-        "type" : "string"
-      },
-      "address" : {
-        "type" : "string"
-      },
-      "city" : {
-        "type" : "string"
-      },
-      "code" : {
-        "maximum" : 99999,
-        "minimum" : 0,
-        "type" : "number",
-        "format" : "int64"
-      },
-      "district" : {
-        "maxLength" : 2,
-        "minLength" : 2,
-        "type" : "string"
-      }
+  "required" : [ "productId", "quantity" ],
+  "type" : "object",
+  "properties" : {
+    "productId" : {
+      "minLength" : 1,
+      "type" : "string"
+    },
+    "quantity" : {
+      "minimum" : 1,
+      "type" : "number"
     }
-  }, {
-    "required" : [ "address", "city", "code", "description", "district", "user" ]
-  } ]
+  }
 };
             defs["body_8"] = {
   "allOf" : [ {
@@ -972,20 +961,49 @@
       }
     }
   }, {
-    "required" : [ "id" ]
+    "required" : [ "address", "city", "code", "description", "district", "recipientName", "recipientSurname", "user" ]
   } ]
 };
             defs["body_9"] = {
-  "required" : [ "billingAddress", "shippingAddress" ],
-  "type" : "object",
-  "properties" : {
-    "shippingAddress" : {
-      "type" : "string"
-    },
-    "billingAddress" : {
-      "type" : "string"
+  "allOf" : [ {
+    "type" : "object",
+    "properties" : {
+      "id" : {
+        "type" : "string"
+      },
+      "user" : {
+        "type" : "string"
+      },
+      "description" : {
+        "type" : "string"
+      },
+      "recipientName" : {
+        "type" : "string"
+      },
+      "recipientSurname" : {
+        "type" : "string"
+      },
+      "address" : {
+        "type" : "string"
+      },
+      "city" : {
+        "type" : "string"
+      },
+      "code" : {
+        "maximum" : 99999,
+        "minimum" : 0,
+        "type" : "number",
+        "format" : "int64"
+      },
+      "district" : {
+        "maxLength" : 2,
+        "minLength" : 2,
+        "type" : "string"
+      }
     }
-  }
+  }, {
+    "required" : [ "id" ]
+  } ]
 };
             defs["inline_response_200"] = {
   "allOf" : [ {
@@ -1007,13 +1025,13 @@
         "uniqueItems" : true,
         "type" : "array",
         "items" : {
-          "required" : [ "categoryName" ],
+          "required" : [ "name" ],
           "type" : "object",
           "properties" : {
             "id" : {
               "type" : "string"
             },
-            "categoryName" : {
+            "name" : {
               "type" : "string"
             }
           }
@@ -1082,7 +1100,10 @@
               "type" : "string"
             },
             "products" : {
-              "type" : "object"
+              "type" : "array",
+              "items" : {
+                "type" : "object"
+              }
             },
             "shippingAddress" : {
               "type" : "object"
@@ -1139,7 +1160,10 @@
             "type" : "string"
           },
           "products" : {
-            "type" : "object"
+            "type" : "array",
+            "items" : {
+              "type" : "object"
+            }
           },
           "shippingAddress" : {
             "type" : "object"
@@ -1310,13 +1334,13 @@
   }, {
     "properties" : {
       "data" : {
-        "required" : [ "categoryName" ],
+        "required" : [ "name" ],
         "type" : "object",
         "properties" : {
           "id" : {
             "type" : "string"
           },
-          "categoryName" : {
+          "name" : {
             "type" : "string"
           }
         }
@@ -1344,64 +1368,63 @@
         "uniqueItems" : true,
         "type" : "array",
         "items" : {
-          "allOf" : [ {
-            "type" : "object",
-            "properties" : {
-              "id" : {
-                "minLength" : 1,
+          "type" : "object",
+          "properties" : {
+            "id" : {
+              "minLength" : 1,
+              "type" : "string"
+            },
+            "name" : {
+              "maxLength" : 50,
+              "minLength" : 1,
+              "type" : "string"
+            },
+            "description" : {
+              "maxLength" : 250,
+              "minLength" : 1,
+              "type" : "string"
+            },
+            "primaryPhoto" : {
+              "minLength" : 1,
+              "type" : "string"
+            },
+            "secondaryPhotos" : {
+              "maxItems" : 4,
+              "uniqueItems" : true,
+              "type" : "array",
+              "items" : {
                 "type" : "string"
-              },
-              "name" : {
-                "maxLength" : 50,
-                "minLength" : 1,
-                "type" : "string"
-              },
-              "description" : {
-                "maxLength" : 250,
-                "minLength" : 1,
-                "type" : "string"
-              },
-              "images" : {
-                "maxItems" : 4,
-                "uniqueItems" : true,
-                "type" : "array",
-                "items" : {
-                  "type" : "string"
-                }
-              },
-              "category" : {
-                "minLength" : 1,
-                "type" : "string"
-              },
-              "price" : {
-                "minimum" : 0,
-                "type" : "number",
-                "format" : "float"
-              },
-              "netPrice" : {
-                "minimum" : 0,
-                "type" : "number",
-                "format" : "float"
-              },
-              "tax" : {
-                "type" : "number",
-                "format" : "int64"
-              },
-              "show" : {
-                "type" : "boolean"
-              },
-              "showHome" : {
-                "type" : "boolean"
-              },
-              "stock" : {
-                "minimum" : 0,
-                "type" : "integer",
-                "format" : "int64"
               }
+            },
+            "category" : {
+              "minLength" : 1,
+              "type" : "string"
+            },
+            "price" : {
+              "minimum" : 0,
+              "type" : "number",
+              "format" : "float"
+            },
+            "netPrice" : {
+              "minimum" : 0,
+              "type" : "number",
+              "format" : "float"
+            },
+            "tax" : {
+              "type" : "number"
+            },
+            "show" : {
+              "type" : "boolean"
+            },
+            "showHome" : {
+              "type" : "boolean"
+            },
+            "stock" : {
+              "minimum" : 0,
+              "type" : "integer",
+              "format" : "int64"
             }
-          }, {
-            "required" : [ "category", "description", "id", "name", "netPrice", "tax" ]
-          } ]
+          }
         }
       }
     }
@@ -1440,7 +1463,11 @@
             "minLength" : 1,
             "type" : "string"
           },
-          "images" : {
+          "primaryPhoto" : {
+            "minLength" : 1,
+            "type" : "string"
+          },
+          "secondaryPhotos" : {
             "maxItems" : 4,
             "uniqueItems" : true,
             "type" : "array",
@@ -1463,8 +1490,7 @@
             "format" : "float"
           },
           "tax" : {
-            "type" : "number",
-            "format" : "int64"
+            "type" : "number"
           },
           "show" : {
             "type" : "boolean"
@@ -1571,7 +1597,7 @@
   }, {
     "properties" : {
       "data" : {
-        "required" : [ "id", "tax", "total" ],
+        "required" : [ "id", "itemCount", "products", "tax", "total" ],
         "type" : "object",
         "properties" : {
           "id" : {
@@ -1582,10 +1608,10 @@
             "uniqueItems" : true,
             "type" : "array",
             "items" : {
-              "required" : [ "id", "name", "price", "primaryPhoto", "quantity" ],
+              "required" : [ "name", "price", "primaryPhoto", "productId", "quantity", "tax", "total" ],
               "type" : "object",
               "properties" : {
-                "id" : {
+                "productId" : {
                   "minLength" : 1,
                   "type" : "string"
                 },
@@ -1600,25 +1626,33 @@
                 },
                 "price" : {
                   "minimum" : 0,
-                  "type" : "number",
-                  "format" : "float"
+                  "type" : "number"
+                },
+                "tax" : {
+                  "minimum" : 0,
+                  "type" : "number"
                 },
                 "quantity" : {
                   "minimum" : 1,
-                  "type" : "integer"
+                  "type" : "number"
+                },
+                "total" : {
+                  "type" : "number"
                 }
               }
             }
           },
           "total" : {
             "minimum" : 0,
-            "type" : "number",
-            "format" : "float"
+            "type" : "number"
           },
           "tax" : {
             "minimum" : 0,
-            "type" : "number",
-            "format" : "float"
+            "type" : "number"
+          },
+          "itemCount" : {
+            "minimum" : 0,
+            "type" : "number"
           }
         }
       }
@@ -1777,6 +1811,9 @@
                     <li data-group="Cart" data-name="addToCart" class="">
                       <a href="#api-Cart-addToCart">addToCart</a>
                     </li>
+                    <li data-group="Cart" data-name="changeQuantity" class="">
+                      <a href="#api-Cart-changeQuantity">changeQuantity</a>
+                    </li>
                     <li data-group="Cart" data-name="deleteCart" class="">
                       <a href="#api-Cart-deleteCart">deleteCart</a>
                     </li>
@@ -1819,6 +1856,12 @@
                     <li data-group="Orders" data-name="getOrders" class="">
                       <a href="#api-Orders-getOrders">getOrders</a>
                     </li>
+                    <li data-group="Orders" data-name="refundOrderByID" class="">
+                      <a href="#api-Orders-refundOrderByID">refundOrderByID</a>
+                    </li>
+                    <li data-group="Orders" data-name="updateOrderByID" class="">
+                      <a href="#api-Orders-updateOrderByID">updateOrderByID</a>
+                    </li>
                   <li class="nav-header" data-group="Products"><a href="#api-Products">API Methods - Products</a></li>
                     <li data-group="Products" data-name="getPDP" class="">
                       <a href="#api-Products-getPDP">getPDP</a>
@@ -1852,6 +1895,9 @@
                       <a href="#api-Taxes-updateTax">updateTax</a>
                     </li>
                   <li class="nav-header" data-group="Users"><a href="#api-Users">API Methods - Users</a></li>
+                    <li data-group="Users" data-name="checkJWT" class="">
+                      <a href="#api-Users-checkJWT">checkJWT</a>
+                    </li>
                     <li data-group="Users" data-name="checkUserJWT" class="">
                       <a href="#api-Users-checkUserJWT">checkUserJWT</a>
                     </li>
@@ -1863,9 +1909,6 @@
                     </li>
                     <li data-group="Users" data-name="getCustomers" class="">
                       <a href="#api-Users-getCustomers">getCustomers</a>
-                    </li>
-                    <li data-group="Users" data-name="usersCheckTokenGet" class="">
-                      <a href="#api-Users-usersCheckTokenGet">usersCheckTokenGet</a>
                     </li>
           </ul>
         </nav>
@@ -1880,7 +1923,7 @@
         <div id="header">
           <div id="api-_">
             <h2 id="welcome-to-apidoc">API and SDK Documentation</h2>
-              <div class="app-desc">Version: 0.3.0</div>
+              <div class="app-desc">Version: 0.4.1</div>
             <hr>
             <div>Queste sono le OpenAPI per EmporioLambda</div>
           </div>
@@ -1922,7 +1965,7 @@
                           <div class="tab-pane active" id="examples-Addresses-getAddress-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/addresses/{id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/addresses/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Addresses-getAddress-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -2330,7 +2373,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Addresses-getAddresses-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/addresses"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/addresses"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Addresses-getAddresses-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -2725,7 +2768,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/addresses"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/addresses"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Addresses-insertAddress-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -2741,7 +2784,7 @@ public class AddressesApiExample {
     public static void main(String[] args) {
         
         AddressesApi apiInstance = new AddressesApi();
-        Body_7 body = {
+        Body_8 body = {
   "user" : "andrea",
   "description" : "Indirizzo Bar",
   "recipientName" : "Andrea",
@@ -2750,7 +2793,7 @@ public class AddressesApiExample {
   "city" : "Verona",
   "code" : "35130",
   "district" : "VR"
-}; // Body_7 | 
+}; // Body_8 | 
         String authorization = authorization_example; // String | token JWT
         try {
             inline_response_200_1 result = apiInstance.insertAddress(body, authorization);
@@ -2770,7 +2813,7 @@ public class AddressesApiExample {
 
     public static void main(String[] args) {
         AddressesApi apiInstance = new AddressesApi();
-        Body_7 body = {
+        Body_8 body = {
   "user" : "andrea",
   "description" : "Indirizzo Bar",
   "recipientName" : "Andrea",
@@ -2779,7 +2822,7 @@ public class AddressesApiExample {
   "city" : "Verona",
   "code" : "35130",
   "district" : "VR"
-}; // Body_7 | 
+}; // Body_8 | 
         String authorization = authorization_example; // String | token JWT
         try {
             inline_response_200_1 result = apiInstance.insertAddress(body, authorization);
@@ -2796,7 +2839,7 @@ public class AddressesApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Addresses-insertAddress-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">Body_7 *body = {
+                              <pre class="prettyprint"><code class="language-cpp">Body_8 *body = {
   "user" : "andrea",
   "description" : "Indirizzo Bar",
   "recipientName" : "Andrea",
@@ -2837,7 +2880,7 @@ var body = {
   "city" : "Verona",
   "code" : "35130",
   "district" : "VR"
-}; // {{Body_7}} 
+}; // {{Body_8}} 
 var authorization = authorization_example; // {{String}} token JWT
 
 var callback = function(error, data, response) {
@@ -2869,7 +2912,7 @@ namespace Example
         {
 
             var apiInstance = new AddressesApi();
-            var body = new Body_7(); // Body_7 | 
+            var body = new Body_8(); // Body_8 | 
             var authorization = authorization_example;  // String | token JWT
 
             try
@@ -2902,7 +2945,7 @@ $body = {
   "city" : "Verona",
   "code" : "35130",
   "district" : "VR"
-}; // Body_7 | 
+}; // Body_8 | 
 $authorization = authorization_example; // String | token JWT
 
 try {
@@ -2920,7 +2963,7 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::AddressesApi;
 
 my $api_instance = WWW::SwaggerClient::AddressesApi->new();
-my $body = WWW::SwaggerClient::Object::Body_7->new(); # Body_7 | 
+my $body = WWW::SwaggerClient::Object::Body_8->new(); # Body_8 | 
 my $authorization = authorization_example; # String | token JWT
 
 eval { 
@@ -2950,7 +2993,7 @@ body = {
   "city" : "Verona",
   "code" : "35130",
   "district" : "VR"
-} # Body_7 | 
+} # Body_8 | 
 authorization = authorization_example # String | token JWT
 
 try: 
@@ -3011,7 +3054,7 @@ except ApiException as e:
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/body_7"
+        "$ref" : "#/components/schemas/body_8"
       },
       "example" : {
         "user" : "andrea",
@@ -3205,7 +3248,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Addresses-removeAddress-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/addresses/{id}?override="</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/addresses/{id}?override="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Addresses-removeAddress-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -3638,7 +3681,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X PATCH\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/addresses/{id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/addresses/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Addresses-updateAddress-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -3654,10 +3697,10 @@ public class AddressesApiExample {
     public static void main(String[] args) {
         
         AddressesApi apiInstance = new AddressesApi();
-        Body_8 body = {
+        Body_9 body = {
   "id" : "3",
   "description" : "Indirizzo casa la mare"
-}; // Body_8 | 
+}; // Body_9 | 
         String authorization = authorization_example; // String | token JWT
         String id = id_example; // String | 
         try {
@@ -3678,10 +3721,10 @@ public class AddressesApiExample {
 
     public static void main(String[] args) {
         AddressesApi apiInstance = new AddressesApi();
-        Body_8 body = {
+        Body_9 body = {
   "id" : "3",
   "description" : "Indirizzo casa la mare"
-}; // Body_8 | 
+}; // Body_9 | 
         String authorization = authorization_example; // String | token JWT
         String id = id_example; // String | 
         try {
@@ -3699,7 +3742,7 @@ public class AddressesApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Addresses-updateAddress-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">Body_8 *body = {
+                              <pre class="prettyprint"><code class="language-cpp">Body_9 *body = {
   "id" : "3",
   "description" : "Indirizzo casa la mare"
 }; // 
@@ -3730,7 +3773,7 @@ var api = new EmporioLambdaBe.AddressesApi()
 var body = {
   "id" : "3",
   "description" : "Indirizzo casa la mare"
-}; // {{Body_8}} 
+}; // {{Body_9}} 
 var authorization = authorization_example; // {{String}} token JWT
 var id = id_example; // {{String}} 
 
@@ -3763,7 +3806,7 @@ namespace Example
         {
 
             var apiInstance = new AddressesApi();
-            var body = new Body_8(); // Body_8 | 
+            var body = new Body_9(); // Body_9 | 
             var authorization = authorization_example;  // String | token JWT
             var id = id_example;  // String | 
 
@@ -3791,7 +3834,7 @@ $api_instance = new Swagger\Client\ApiAddressesApi();
 $body = {
   "id" : "3",
   "description" : "Indirizzo casa la mare"
-}; // Body_8 | 
+}; // Body_9 | 
 $authorization = authorization_example; // String | token JWT
 $id = id_example; // String | 
 
@@ -3810,7 +3853,7 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::AddressesApi;
 
 my $api_instance = WWW::SwaggerClient::AddressesApi->new();
-my $body = WWW::SwaggerClient::Object::Body_8->new(); # Body_8 | 
+my $body = WWW::SwaggerClient::Object::Body_9->new(); # Body_9 | 
 my $authorization = authorization_example; # String | token JWT
 my $id = id_example; # String | 
 
@@ -3835,7 +3878,7 @@ api_instance = swagger_client.AddressesApi()
 body = {
   "id" : "3",
   "description" : "Indirizzo casa la mare"
-} # Body_8 | 
+} # Body_9 | 
 authorization = authorization_example # String | token JWT
 id = id_example # String | 
 
@@ -3923,7 +3966,7 @@ except ApiException as e:
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/body_8"
+        "$ref" : "#/components/schemas/body_9"
       },
       "example" : {
         "id" : "3",
@@ -4092,7 +4135,7 @@ except ApiException as e:
                         <p class="marked">Receive a product ID and a quantity, iff se quantity is available in stock the operation is successful</p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/cart/product/{id}</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/cart</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
@@ -4115,7 +4158,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/cart/product/{id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/cart"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Cart-addToCart-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -4132,14 +4175,13 @@ public class CartApiExample {
         
         CartApi apiInstance = new CartApi();
         Body_6 body = {
-  "id" : "123VF",
-  "quantity" : 3
+  "productId" : "1234",
+  "quantity" : 2
 }; // Body_6 | 
-        String id = id_example; // String | product id
         String authorization = authorization_example; // String | token JWT
         String guestToken = guestToken_example; // String | 
         try {
-            inline_response_200_1 result = apiInstance.addToCart(body, id, authorization, guestToken);
+            inline_response_200_1 result = apiInstance.addToCart(body, authorization, guestToken);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling CartApi#addToCart");
@@ -4157,14 +4199,13 @@ public class CartApiExample {
     public static void main(String[] args) {
         CartApi apiInstance = new CartApi();
         Body_6 body = {
-  "id" : "123VF",
-  "quantity" : 3
+  "productId" : "1234",
+  "quantity" : 2
 }; // Body_6 | 
-        String id = id_example; // String | product id
         String authorization = authorization_example; // String | token JWT
         String guestToken = guestToken_example; // String | 
         try {
-            inline_response_200_1 result = apiInstance.addToCart(body, id, authorization, guestToken);
+            inline_response_200_1 result = apiInstance.addToCart(body, authorization, guestToken);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling CartApi#addToCart");
@@ -4179,10 +4220,9 @@ public class CartApiExample {
   </div> -->
                             <div class="tab-pane" id="examples-Cart-addToCart-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">Body_6 *body = {
-  "id" : "123VF",
-  "quantity" : 3
+  "productId" : "1234",
+  "quantity" : 2
 }; // 
-String *id = id_example; // product id
 String *authorization = authorization_example; // token JWT (optional)
 String *guestToken = guestToken_example; //  (optional)
 
@@ -4190,7 +4230,6 @@ CartApi *apiInstance = [[CartApi alloc] init];
 
 // Add a product to cart
 [apiInstance addToCartWith:body
-    id:id
     authorization:authorization
     guestToken:guestToken
               completionHandler: ^(inline_response_200_1 output, NSError* error) {
@@ -4209,10 +4248,9 @@ CartApi *apiInstance = [[CartApi alloc] init];
 
 var api = new EmporioLambdaBe.CartApi()
 var body = {
-  "id" : "123VF",
-  "quantity" : 3
+  "productId" : "1234",
+  "quantity" : 2
 }; // {{Body_6}} 
-var id = id_example; // {{String}} product id
 var opts = { 
   'authorization': authorization_example // {{String}} token JWT
   'guestToken': guestToken_example // {{String}} 
@@ -4224,7 +4262,7 @@ var callback = function(error, data, response) {
     console.log('API called successfully. Returned data: ' + data);
   }
 };
-api.addToCart(bodyid, opts, callback);
+api.addToCart(body, opts, callback);
 </code></pre>
                             </div>
 
@@ -4247,14 +4285,13 @@ namespace Example
 
             var apiInstance = new CartApi();
             var body = new Body_6(); // Body_6 | 
-            var id = id_example;  // String | product id
             var authorization = authorization_example;  // String | token JWT (optional) 
             var guestToken = guestToken_example;  // String |  (optional) 
 
             try
             {
                 // Add a product to cart
-                inline_response_200_1 result = apiInstance.addToCart(body, id, authorization, guestToken);
+                inline_response_200_1 result = apiInstance.addToCart(body, authorization, guestToken);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -4273,15 +4310,14 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiCartApi();
 $body = {
-  "id" : "123VF",
-  "quantity" : 3
+  "productId" : "1234",
+  "quantity" : 2
 }; // Body_6 | 
-$id = id_example; // String | product id
 $authorization = authorization_example; // String | token JWT
 $guestToken = guestToken_example; // String | 
 
 try {
-    $result = $api_instance->addToCart($body, $id, $authorization, $guestToken);
+    $result = $api_instance->addToCart($body, $authorization, $guestToken);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling CartApi->addToCart: ', $e->getMessage(), PHP_EOL;
@@ -4296,12 +4332,11 @@ use WWW::SwaggerClient::CartApi;
 
 my $api_instance = WWW::SwaggerClient::CartApi->new();
 my $body = WWW::SwaggerClient::Object::Body_6->new(); # Body_6 | 
-my $id = id_example; # String | product id
 my $authorization = authorization_example; # String | token JWT
 my $guestToken = guestToken_example; # String | 
 
 eval { 
-    my $result = $api_instance->addToCart(body => $body, id => $id, authorization => $authorization, guestToken => $guestToken);
+    my $result = $api_instance->addToCart(body => $body, authorization => $authorization, guestToken => $guestToken);
     print Dumper($result);
 };
 if ($@) {
@@ -4319,16 +4354,15 @@ from pprint import pprint
 # create an instance of the API class
 api_instance = swagger_client.CartApi()
 body = {
-  "id" : "123VF",
-  "quantity" : 3
+  "productId" : "1234",
+  "quantity" : 2
 } # Body_6 | 
-id = id_example # String | product id
 authorization = authorization_example # String | token JWT (optional)
 guestToken = guestToken_example # String |  (optional)
 
 try: 
     # Add a product to cart
-    api_response = api_instance.add_to_cart(body, id, authorization=authorization, guestToken=guestToken)
+    api_response = api_instance.add_to_cart(body, authorization=authorization, guestToken=guestToken)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling CartApi->addToCart: %s\n" % e)</code></pre>
@@ -4337,35 +4371,6 @@ except ApiException as e:
 
                           <h2>Parameters</h2>
 
-                            <div class="methodsubtabletitle">Path parameters</div>
-                            <table id="methodsubtable">
-                                <tr>
-                                  <th width="150px">Name</th>
-                                  <th>Description</th>
-                                </tr>
-                                  <tr><td style="width:150px;">id*</td>
-                                  <td>
-                                  
-                                  
-                                      <div id="d2e199_addToCart_id">
-                                          <div class="json-schema-view">
-                                              <div class="primitive">
-                                                  <span class="type">
-                                                      String
-                                                  </span>
-                                  
-                                                      <div class="inner description">
-                                                          product id
-                                                      </div>
-                                              </div>
-                                                  <div class="inner required">
-                                                      Required
-                                                  </div>
-                                          </div>
-                                      </div>
-                                  </td>
-                                  </tr>
-                            </table>
 
                             <div class="methodsubtabletitle">Header parameters</div>
                             <table id="methodsubtable">
@@ -4429,8 +4434,8 @@ except ApiException as e:
         "$ref" : "#/components/schemas/body_6"
       },
       "example" : {
-        "id" : "123VF",
-        "quantity" : 3
+        "productId" : "1234",
+        "quantity" : 2
       }
     }
   },
@@ -4580,6 +4585,506 @@ except ApiException as e:
                         </article>
                       </div>
                       <hr>
+                    <div id="api-Cart-changeQuantity">
+                      <article id="api-Cart-changeQuantity-0" data-group="User" data-name="changeQuantity" data-version="0">
+                        <div class="pull-left">
+                          <h1>changeQuantity</h1>
+                          <p>Modify product in the cart</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Change the quantity of the product in the cart</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="patch"><code><span class="pln">/cart/product/{id}</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Cart-changeQuantity-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Cart-changeQuantity-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Cart-changeQuantity-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Cart-changeQuantity-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Cart-changeQuantity-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Cart-changeQuantity-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Cart-changeQuantity-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Cart-changeQuantity-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Cart-changeQuantity-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Cart-changeQuantity-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Cart-changeQuantity-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Cart-changeQuantity-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X PATCH\
+-H "Accept: application/json"\
+-H "Content-Type: application/json"\
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/cart/product/{id}"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Cart-changeQuantity-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.CartApi;
+
+import java.io.File;
+import java.util.*;
+
+public class CartApiExample {
+
+    public static void main(String[] args) {
+        
+        CartApi apiInstance = new CartApi();
+        Body_7 body = {
+  "productId" : "1234",
+  "quantity" : 2
+}; // Body_7 | 
+        String id = id_example; // String | id del prodotto da modificare
+        String authorization = authorization_example; // String | token JWT
+        String guestToken = guestToken_example; // String | 
+        try {
+            inline_response_200_1 result = apiInstance.changeQuantity(body, id, authorization, guestToken);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling CartApi#changeQuantity");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Cart-changeQuantity-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.CartApi;
+
+public class CartApiExample {
+
+    public static void main(String[] args) {
+        CartApi apiInstance = new CartApi();
+        Body_7 body = {
+  "productId" : "1234",
+  "quantity" : 2
+}; // Body_7 | 
+        String id = id_example; // String | id del prodotto da modificare
+        String authorization = authorization_example; // String | token JWT
+        String guestToken = guestToken_example; // String | 
+        try {
+            inline_response_200_1 result = apiInstance.changeQuantity(body, id, authorization, guestToken);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling CartApi#changeQuantity");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Cart-changeQuantity-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Cart-changeQuantity-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">Body_7 *body = {
+  "productId" : "1234",
+  "quantity" : 2
+}; // 
+String *id = id_example; // id del prodotto da modificare
+String *authorization = authorization_example; // token JWT (optional)
+String *guestToken = guestToken_example; //  (optional)
+
+CartApi *apiInstance = [[CartApi alloc] init];
+
+// Modify product in the cart
+[apiInstance changeQuantityWith:body
+    id:id
+    authorization:authorization
+    guestToken:guestToken
+              completionHandler: ^(inline_response_200_1 output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Cart-changeQuantity-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var EmporioLambdaBe = require('emporio_lambda_be');
+
+var api = new EmporioLambdaBe.CartApi()
+var body = {
+  "productId" : "1234",
+  "quantity" : 2
+}; // {{Body_7}} 
+var id = id_example; // {{String}} id del prodotto da modificare
+var opts = { 
+  'authorization': authorization_example // {{String}} token JWT
+  'guestToken': guestToken_example // {{String}} 
+};
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.changeQuantity(bodyid, opts, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Cart-changeQuantity-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Cart-changeQuantity-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class changeQuantityExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new CartApi();
+            var body = new Body_7(); // Body_7 | 
+            var id = id_example;  // String | id del prodotto da modificare
+            var authorization = authorization_example;  // String | token JWT (optional) 
+            var guestToken = guestToken_example;  // String |  (optional) 
+
+            try
+            {
+                // Modify product in the cart
+                inline_response_200_1 result = apiInstance.changeQuantity(body, id, authorization, guestToken);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling CartApi.changeQuantity: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Cart-changeQuantity-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiCartApi();
+$body = {
+  "productId" : "1234",
+  "quantity" : 2
+}; // Body_7 | 
+$id = id_example; // String | id del prodotto da modificare
+$authorization = authorization_example; // String | token JWT
+$guestToken = guestToken_example; // String | 
+
+try {
+    $result = $api_instance->changeQuantity($body, $id, $authorization, $guestToken);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling CartApi->changeQuantity: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Cart-changeQuantity-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::CartApi;
+
+my $api_instance = WWW::SwaggerClient::CartApi->new();
+my $body = WWW::SwaggerClient::Object::Body_7->new(); # Body_7 | 
+my $id = id_example; # String | id del prodotto da modificare
+my $authorization = authorization_example; # String | token JWT
+my $guestToken = guestToken_example; # String | 
+
+eval { 
+    my $result = $api_instance->changeQuantity(body => $body, id => $id, authorization => $authorization, guestToken => $guestToken);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling CartApi->changeQuantity: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Cart-changeQuantity-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.CartApi()
+body = {
+  "productId" : "1234",
+  "quantity" : 2
+} # Body_7 | 
+id = id_example # String | id del prodotto da modificare
+authorization = authorization_example # String | token JWT (optional)
+guestToken = guestToken_example # String |  (optional)
+
+try: 
+    # Modify product in the cart
+    api_response = api_instance.change_quantity(body, id, authorization=authorization, guestToken=guestToken)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling CartApi->changeQuantity: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+                            <div class="methodsubtabletitle">Path parameters</div>
+                            <table id="methodsubtable">
+                                <tr>
+                                  <th width="150px">Name</th>
+                                  <th>Description</th>
+                                </tr>
+                                  <tr><td style="width:150px;">id*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_changeQuantity_id">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      String
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          id del prodotto da modificare
+                                                      </div>
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                            </table>
+
+                            <div class="methodsubtabletitle">Header parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                  <tr><td style="width:150px;">Authorization</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_changeQuantity_authorization">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      String
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          token JWT
+                                                      </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                                  <tr><td style="width:150px;">guestToken</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_changeQuantity_guestToken">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      String
+                                                  </span>
+                                  
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                            </table>
+
+                            <div class="methodsubtabletitle">Body parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">body <span style="color:red;">*</span></td>
+                                <td>
+                                
+                                
+                                <script>
+                                $(document).ready(function() {
+                                  var schemaWrapper = {
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/body_7"
+      },
+      "example" : {
+        "productId" : "1234",
+        "quantity" : 2
+      }
+    }
+  },
+  "required" : true
+};
+                                  var schema = schemaWrapper.content["application/json"].schema;
+                                  if (schema.$ref != null) {
+                                    schema = defsParser.$refs.get(schema.$ref);
+                                  } else {
+                                    schemaWrapper.components = {};
+                                    schemaWrapper.components.schemas = Object.assign({}, defs);
+                                    $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                      console.log(err);
+                                    });
+                                  }
+                                
+                                  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
+                                  var result = $('#d2e199_changeQuantity_body');
+                                  result.empty();
+                                  result.append(view.render());
+                                });
+                                </script>
+                                <div id="d2e199_changeQuantity_body"></div>
+                                </td>
+                                </tr>
+                            </table>
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - quantity modified </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-changeQuantity-200-schema">Schema</a>
+                                </li>
+
+                                  <li class="">
+                                    <a data-toggle="tab" href="#responses-changeQuantity-200-example-0">Response Example</a>
+                                  </li>
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-changeQuantity-200-schema">
+                                  <div id='responses-changeQuantity-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "quantity modified",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/inline_response_200_1"
+      },
+      "example" : {
+        "status" : "success",
+        "message" : "quantity modified"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-changeQuantity-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-changeQuantity-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-changeQuantity-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                                  <div class="tab-pane" id="responses-changeQuantity-200-example-0">
+                                      <pre class="prettyprint"><code class="json">{&quot;status&quot;:&quot;success&quot;,&quot;message&quot;:&quot;quantity modified&quot;}</code></pre>
+                                </div>
+                            </div>
+
+                            <h3> Status: 400 - request error </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-changeQuantity-400-schema">Schema</a>
+                                </li>
+
+                                  <li class="">
+                                    <a data-toggle="tab" href="#responses-changeQuantity-400-example-0">Response Example</a>
+                                  </li>
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-changeQuantity-400-schema">
+                                  <div id='responses-changeQuantity-400-schema-400' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "request error",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/inline_response_200_1"
+      },
+      "example" : {
+        "status" : "error",
+        "message" : "request error"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-changeQuantity-400-schema-data').val(stringify(schema));
+                                        var result = $('#responses-changeQuantity-400-schema-400');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-changeQuantity-400-schema-data' type='hidden' value=''></input>
+                                </div>
+                                  <div class="tab-pane" id="responses-changeQuantity-400-example-0">
+                                      <pre class="prettyprint"><code class="json">{&quot;status&quot;:&quot;error&quot;,&quot;message&quot;:&quot;request error&quot;}</code></pre>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
                     <div id="api-Cart-deleteCart">
                       <article id="api-Cart-deleteCart-0" data-group="User" data-name="deleteCart" data-version="0">
                         <div class="pull-left">
@@ -4614,7 +5119,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Cart-deleteCart-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/cart"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/cart"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Cart-deleteCart-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -5001,7 +5506,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Cart-getCart-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/cart"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/cart"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Cart-getCart-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -5399,7 +5904,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Cart-removeFromCart-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/cart/product/{id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/cart/product/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Cart-removeFromCart-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -5828,7 +6333,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/categories"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/categories"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Categories-createCategory-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -6259,7 +6764,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Categories-getCategories-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/categories"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/categories"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Categories-getCategories-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -6542,7 +7047,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Categories-getCategory-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/categories/{id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/categories/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Categories-getCategory-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -6778,7 +7283,7 @@ except ApiException as e:
         "status" : "success",
         "data" : {
           "id" : "1",
-          "categoryName" : "games"
+          "name" : "games"
         }
       }
     }
@@ -6807,7 +7312,7 @@ except ApiException as e:
                                   <input id='responses-getCategory-200-schema-data' type='hidden' value=''></input>
                                 </div>
                                   <div class="tab-pane" id="responses-getCategory-200-example-0">
-                                      <pre class="prettyprint"><code class="json">{&quot;status&quot;:&quot;success&quot;,&quot;data&quot;:{&quot;id&quot;:&quot;1&quot;,&quot;categoryName&quot;:&quot;games&quot;}}</code></pre>
+                                      <pre class="prettyprint"><code class="json">{&quot;status&quot;:&quot;success&quot;,&quot;data&quot;:{&quot;id&quot;:&quot;1&quot;,&quot;name&quot;:&quot;games&quot;}}</code></pre>
                                 </div>
                             </div>
 
@@ -6906,7 +7411,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Categories-removeCategory-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/categories/{id}?force="</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/categories/{id}?force="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Categories-removeCategory-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -7339,7 +7844,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X PATCH\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/categories/{id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/categories/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Categories-updateCategory-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -7357,7 +7862,7 @@ public class CategoriesApiExample {
         CategoriesApi apiInstance = new CategoriesApi();
         Body_1 body = {
   "id" : "4",
-  "categoryName" : "lampadine"
+  "name" : "lampadine"
 }; // Body_1 | 
         String authorization = authorization_example; // String | token JWT
         String id = id_example; // String | 
@@ -7381,7 +7886,7 @@ public class CategoriesApiExample {
         CategoriesApi apiInstance = new CategoriesApi();
         Body_1 body = {
   "id" : "4",
-  "categoryName" : "lampadine"
+  "name" : "lampadine"
 }; // Body_1 | 
         String authorization = authorization_example; // String | token JWT
         String id = id_example; // String | 
@@ -7402,7 +7907,7 @@ public class CategoriesApiExample {
                             <div class="tab-pane" id="examples-Categories-updateCategory-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">Body_1 *body = {
   "id" : "4",
-  "categoryName" : "lampadine"
+  "name" : "lampadine"
 }; // 
 String *authorization = authorization_example; // token JWT
 String *id = id_example; // 
@@ -7430,7 +7935,7 @@ CategoriesApi *apiInstance = [[CategoriesApi alloc] init];
 var api = new EmporioLambdaBe.CategoriesApi()
 var body = {
   "id" : "4",
-  "categoryName" : "lampadine"
+  "name" : "lampadine"
 }; // {{Body_1}} 
 var authorization = authorization_example; // {{String}} token JWT
 var id = id_example; // {{String}} 
@@ -7491,7 +7996,7 @@ require_once(__DIR__ . '/vendor/autoload.php');
 $api_instance = new Swagger\Client\ApiCategoriesApi();
 $body = {
   "id" : "4",
-  "categoryName" : "lampadine"
+  "name" : "lampadine"
 }; // Body_1 | 
 $authorization = authorization_example; // String | token JWT
 $id = id_example; // String | 
@@ -7535,7 +8040,7 @@ from pprint import pprint
 api_instance = swagger_client.CategoriesApi()
 body = {
   "id" : "4",
-  "categoryName" : "lampadine"
+  "name" : "lampadine"
 } # Body_1 | 
 authorization = authorization_example # String | token JWT
 id = id_example # String | 
@@ -7628,7 +8133,7 @@ except ApiException as e:
       },
       "example" : {
         "id" : "4",
-        "categoryName" : "lampadine"
+        "name" : "lampadine"
       }
     }
   },
@@ -7815,7 +8320,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Checkout-cancelCheckout-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/checkout/{intent-id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/checkout/{intent-id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Checkout-cancelCheckout-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -8195,7 +8700,7 @@ except ApiException as e:
                         <p class="marked">Call this API after the payment was successful</p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="put"><code><span class="pln">/checkout/{intent-id}</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="patch"><code><span class="pln">/checkout/{intent-id}</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
@@ -8215,9 +8720,9 @@ except ApiException as e:
 
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Checkout-completeCheckout-0-curl">
-                           <pre class="prettyprint"><code class="language-bsh">curl -X PUT\
+                           <pre class="prettyprint"><code class="language-bsh">curl -X PATCH\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/checkout/{intent-id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/checkout/{intent-id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Checkout-completeCheckout-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -8620,7 +9125,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/checkout"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/checkout"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Checkout-startCheckout-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -8636,10 +9141,10 @@ public class CheckoutApiExample {
     public static void main(String[] args) {
         
         CheckoutApi apiInstance = new CheckoutApi();
-        Body_9 body = {
+        Body_10 body = {
   "shippingAddress" : "1",
   "billingAddress" : "2"
-}; // Body_9 | 
+}; // Body_10 | 
         String authorization = authorization_example; // String | token JWT
         try {
             inline_response_200_1 result = apiInstance.startCheckout(body, authorization);
@@ -8659,10 +9164,10 @@ public class CheckoutApiExample {
 
     public static void main(String[] args) {
         CheckoutApi apiInstance = new CheckoutApi();
-        Body_9 body = {
+        Body_10 body = {
   "shippingAddress" : "1",
   "billingAddress" : "2"
-}; // Body_9 | 
+}; // Body_10 | 
         String authorization = authorization_example; // String | token JWT
         try {
             inline_response_200_1 result = apiInstance.startCheckout(body, authorization);
@@ -8679,7 +9184,7 @@ public class CheckoutApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Checkout-startCheckout-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">Body_9 *body = {
+                              <pre class="prettyprint"><code class="language-cpp">Body_10 *body = {
   "shippingAddress" : "1",
   "billingAddress" : "2"
 }; // 
@@ -8708,7 +9213,7 @@ var api = new EmporioLambdaBe.CheckoutApi()
 var body = {
   "shippingAddress" : "1",
   "billingAddress" : "2"
-}; // {{Body_9}} 
+}; // {{Body_10}} 
 var authorization = authorization_example; // {{String}} token JWT
 
 var callback = function(error, data, response) {
@@ -8740,7 +9245,7 @@ namespace Example
         {
 
             var apiInstance = new CheckoutApi();
-            var body = new Body_9(); // Body_9 | 
+            var body = new Body_10(); // Body_10 | 
             var authorization = authorization_example;  // String | token JWT
 
             try
@@ -8767,7 +9272,7 @@ $api_instance = new Swagger\Client\ApiCheckoutApi();
 $body = {
   "shippingAddress" : "1",
   "billingAddress" : "2"
-}; // Body_9 | 
+}; // Body_10 | 
 $authorization = authorization_example; // String | token JWT
 
 try {
@@ -8785,7 +9290,7 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::CheckoutApi;
 
 my $api_instance = WWW::SwaggerClient::CheckoutApi->new();
-my $body = WWW::SwaggerClient::Object::Body_9->new(); # Body_9 | 
+my $body = WWW::SwaggerClient::Object::Body_10->new(); # Body_10 | 
 my $authorization = authorization_example; # String | token JWT
 
 eval { 
@@ -8809,7 +9314,7 @@ api_instance = swagger_client.CheckoutApi()
 body = {
   "shippingAddress" : "1",
   "billingAddress" : "2"
-} # Body_9 | 
+} # Body_10 | 
 authorization = authorization_example # String | token JWT
 
 try: 
@@ -8870,7 +9375,7 @@ except ApiException as e:
   "content" : {
     "application/json" : {
       "schema" : {
-        "$ref" : "#/components/schemas/body_9"
+        "$ref" : "#/components/schemas/body_10"
       },
       "example" : {
         "shippingAddress" : "1",
@@ -9084,7 +9589,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Orders-getOrderByID-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/orders/{id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/orders/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Orders-getOrderByID-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -9101,7 +9606,7 @@ public class OrdersApiExample {
         
         OrdersApi apiInstance = new OrdersApi();
         String authorization = authorization_example; // String | token JWT del venditore/cliente
-        String id = id_example; // String | ID dell'ordine richiesto
+        String id = id_example; // String | order ID
         try {
             inline_response_200_11 result = apiInstance.getOrderByID(authorization, id);
             System.out.println(result);
@@ -9121,7 +9626,7 @@ public class OrdersApiExample {
     public static void main(String[] args) {
         OrdersApi apiInstance = new OrdersApi();
         String authorization = authorization_example; // String | token JWT del venditore/cliente
-        String id = id_example; // String | ID dell'ordine richiesto
+        String id = id_example; // String | order ID
         try {
             inline_response_200_11 result = apiInstance.getOrderByID(authorization, id);
             System.out.println(result);
@@ -9138,7 +9643,7 @@ public class OrdersApiExample {
   </div> -->
                             <div class="tab-pane" id="examples-Orders-getOrderByID-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">String *authorization = authorization_example; // token JWT del venditore/cliente
-String *id = id_example; // ID dell'ordine richiesto
+String *id = id_example; // order ID
 
 OrdersApi *apiInstance = [[OrdersApi alloc] init];
 
@@ -9161,7 +9666,7 @@ OrdersApi *apiInstance = [[OrdersApi alloc] init];
 
 var api = new EmporioLambdaBe.OrdersApi()
 var authorization = authorization_example; // {{String}} token JWT del venditore/cliente
-var id = id_example; // {{String}} ID dell'ordine richiesto
+var id = id_example; // {{String}} order ID
 
 var callback = function(error, data, response) {
   if (error) {
@@ -9193,7 +9698,7 @@ namespace Example
 
             var apiInstance = new OrdersApi();
             var authorization = authorization_example;  // String | token JWT del venditore/cliente
-            var id = id_example;  // String | ID dell'ordine richiesto
+            var id = id_example;  // String | order ID
 
             try
             {
@@ -9217,7 +9722,7 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiOrdersApi();
 $authorization = authorization_example; // String | token JWT del venditore/cliente
-$id = id_example; // String | ID dell'ordine richiesto
+$id = id_example; // String | order ID
 
 try {
     $result = $api_instance->getOrderByID($authorization, $id);
@@ -9235,7 +9740,7 @@ use WWW::SwaggerClient::OrdersApi;
 
 my $api_instance = WWW::SwaggerClient::OrdersApi->new();
 my $authorization = authorization_example; # String | token JWT del venditore/cliente
-my $id = id_example; # String | ID dell'ordine richiesto
+my $id = id_example; # String | order ID
 
 eval { 
     my $result = $api_instance->getOrderByID(authorization => $authorization, id => $id);
@@ -9256,7 +9761,7 @@ from pprint import pprint
 # create an instance of the API class
 api_instance = swagger_client.OrdersApi()
 authorization = authorization_example # String | token JWT del venditore/cliente
-id = id_example # String | ID dell'ordine richiesto
+id = id_example # String | order ID
 
 try: 
     # Get order
@@ -9287,7 +9792,7 @@ except ApiException as e:
                                                   </span>
                                   
                                                       <div class="inner description">
-                                                          ID dell&#x27;ordine richiesto
+                                                          order ID
                                                       </div>
                                               </div>
                                                   <div class="inner required">
@@ -9523,7 +10028,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Orders-getOrders-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/orders?status="</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/orders?status="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Orders-getOrders-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -9910,6 +10415,810 @@ except ApiException as e:
                         </article>
                       </div>
                       <hr>
+                    <div id="api-Orders-refundOrderByID">
+                      <article id="api-Orders-refundOrderByID-0" data-group="User" data-name="refundOrderByID" data-version="0">
+                        <div class="pull-left">
+                          <h1>refundOrderByID</h1>
+                          <p>Refund order</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Refund all the amount of an order</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="patch"><code><span class="pln">/orders/{id}/refund</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Orders-refundOrderByID-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Orders-refundOrderByID-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Orders-refundOrderByID-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Orders-refundOrderByID-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Orders-refundOrderByID-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Orders-refundOrderByID-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Orders-refundOrderByID-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Orders-refundOrderByID-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Orders-refundOrderByID-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Orders-refundOrderByID-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Orders-refundOrderByID-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Orders-refundOrderByID-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X PATCH\
+-H "Accept: application/json"\
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/orders/{id}/refund"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Orders-refundOrderByID-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.OrdersApi;
+
+import java.io.File;
+import java.util.*;
+
+public class OrdersApiExample {
+
+    public static void main(String[] args) {
+        
+        OrdersApi apiInstance = new OrdersApi();
+        String authorization = authorization_example; // String | token JWT del venditore
+        String id = id_example; // String | order ID
+        try {
+            inline_response_200_1 result = apiInstance.refundOrderByID(authorization, id);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling OrdersApi#refundOrderByID");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Orders-refundOrderByID-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.OrdersApi;
+
+public class OrdersApiExample {
+
+    public static void main(String[] args) {
+        OrdersApi apiInstance = new OrdersApi();
+        String authorization = authorization_example; // String | token JWT del venditore
+        String id = id_example; // String | order ID
+        try {
+            inline_response_200_1 result = apiInstance.refundOrderByID(authorization, id);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling OrdersApi#refundOrderByID");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Orders-refundOrderByID-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Orders-refundOrderByID-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">String *authorization = authorization_example; // token JWT del venditore
+String *id = id_example; // order ID
+
+OrdersApi *apiInstance = [[OrdersApi alloc] init];
+
+// Refund order
+[apiInstance refundOrderByIDWith:authorization
+    id:id
+              completionHandler: ^(inline_response_200_1 output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Orders-refundOrderByID-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var EmporioLambdaBe = require('emporio_lambda_be');
+
+var api = new EmporioLambdaBe.OrdersApi()
+var authorization = authorization_example; // {{String}} token JWT del venditore
+var id = id_example; // {{String}} order ID
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.refundOrderByID(authorization, id, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Orders-refundOrderByID-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Orders-refundOrderByID-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class refundOrderByIDExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new OrdersApi();
+            var authorization = authorization_example;  // String | token JWT del venditore
+            var id = id_example;  // String | order ID
+
+            try
+            {
+                // Refund order
+                inline_response_200_1 result = apiInstance.refundOrderByID(authorization, id);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling OrdersApi.refundOrderByID: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Orders-refundOrderByID-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiOrdersApi();
+$authorization = authorization_example; // String | token JWT del venditore
+$id = id_example; // String | order ID
+
+try {
+    $result = $api_instance->refundOrderByID($authorization, $id);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling OrdersApi->refundOrderByID: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Orders-refundOrderByID-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::OrdersApi;
+
+my $api_instance = WWW::SwaggerClient::OrdersApi->new();
+my $authorization = authorization_example; # String | token JWT del venditore
+my $id = id_example; # String | order ID
+
+eval { 
+    my $result = $api_instance->refundOrderByID(authorization => $authorization, id => $id);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling OrdersApi->refundOrderByID: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Orders-refundOrderByID-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.OrdersApi()
+authorization = authorization_example # String | token JWT del venditore
+id = id_example # String | order ID
+
+try: 
+    # Refund order
+    api_response = api_instance.refund_order_by_id(authorization, id)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling OrdersApi->refundOrderByID: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+                            <div class="methodsubtabletitle">Path parameters</div>
+                            <table id="methodsubtable">
+                                <tr>
+                                  <th width="150px">Name</th>
+                                  <th>Description</th>
+                                </tr>
+                                  <tr><td style="width:150px;">id*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_refundOrderByID_id">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      String
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          order ID
+                                                      </div>
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                            </table>
+
+                            <div class="methodsubtabletitle">Header parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                  <tr><td style="width:150px;">Authorization*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_refundOrderByID_authorization">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      String
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          token JWT del venditore
+                                                      </div>
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                            </table>
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - order refunded </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-refundOrderByID-200-schema">Schema</a>
+                                </li>
+
+                                  <li class="">
+                                    <a data-toggle="tab" href="#responses-refundOrderByID-200-example-0">Response Example</a>
+                                  </li>
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-refundOrderByID-200-schema">
+                                  <div id='responses-refundOrderByID-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "order refunded",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/inline_response_200_1"
+      },
+      "example" : {
+        "status" : "success",
+        "message" : "ordine rimborsato completamente"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-refundOrderByID-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-refundOrderByID-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-refundOrderByID-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                                  <div class="tab-pane" id="responses-refundOrderByID-200-example-0">
+                                      <pre class="prettyprint"><code class="json">{&quot;status&quot;:&quot;success&quot;,&quot;message&quot;:&quot;ordine rimborsato completamente&quot;}</code></pre>
+                                </div>
+                            </div>
+
+                            <h3> Status: 400 - request error </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-refundOrderByID-400-schema">Schema</a>
+                                </li>
+
+                                  <li class="">
+                                    <a data-toggle="tab" href="#responses-refundOrderByID-400-example-0">Response Example</a>
+                                  </li>
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-refundOrderByID-400-schema">
+                                  <div id='responses-refundOrderByID-400-schema-400' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "request error",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/inline_response_200_1"
+      },
+      "example" : {
+        "status" : "error",
+        "message" : "richiesta fallita"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-refundOrderByID-400-schema-data').val(stringify(schema));
+                                        var result = $('#responses-refundOrderByID-400-schema-400');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-refundOrderByID-400-schema-data' type='hidden' value=''></input>
+                                </div>
+                                  <div class="tab-pane" id="responses-refundOrderByID-400-example-0">
+                                      <pre class="prettyprint"><code class="json">{&quot;status&quot;:&quot;error&quot;,&quot;message&quot;:&quot;richiesta fallita&quot;}</code></pre>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Orders-updateOrderByID">
+                      <article id="api-Orders-updateOrderByID-0" data-group="User" data-name="updateOrderByID" data-version="0">
+                        <div class="pull-left">
+                          <h1>updateOrderByID</h1>
+                          <p>Update status</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">Update the status of the order</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="patch"><code><span class="pln">/orders/{id}</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Orders-updateOrderByID-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Orders-updateOrderByID-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Orders-updateOrderByID-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Orders-updateOrderByID-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Orders-updateOrderByID-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Orders-updateOrderByID-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Orders-updateOrderByID-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Orders-updateOrderByID-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Orders-updateOrderByID-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Orders-updateOrderByID-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Orders-updateOrderByID-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Orders-updateOrderByID-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X PATCH\
+-H "Accept: application/json"\
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/orders/{id}"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Orders-updateOrderByID-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.OrdersApi;
+
+import java.io.File;
+import java.util.*;
+
+public class OrdersApiExample {
+
+    public static void main(String[] args) {
+        
+        OrdersApi apiInstance = new OrdersApi();
+        String authorization = authorization_example; // String | token JWT del venditore
+        String id = id_example; // String | order ID
+        try {
+            inline_response_200_1 result = apiInstance.updateOrderByID(authorization, id);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling OrdersApi#updateOrderByID");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Orders-updateOrderByID-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.OrdersApi;
+
+public class OrdersApiExample {
+
+    public static void main(String[] args) {
+        OrdersApi apiInstance = new OrdersApi();
+        String authorization = authorization_example; // String | token JWT del venditore
+        String id = id_example; // String | order ID
+        try {
+            inline_response_200_1 result = apiInstance.updateOrderByID(authorization, id);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling OrdersApi#updateOrderByID");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Orders-updateOrderByID-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Orders-updateOrderByID-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">String *authorization = authorization_example; // token JWT del venditore
+String *id = id_example; // order ID
+
+OrdersApi *apiInstance = [[OrdersApi alloc] init];
+
+// Update status
+[apiInstance updateOrderByIDWith:authorization
+    id:id
+              completionHandler: ^(inline_response_200_1 output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Orders-updateOrderByID-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var EmporioLambdaBe = require('emporio_lambda_be');
+
+var api = new EmporioLambdaBe.OrdersApi()
+var authorization = authorization_example; // {{String}} token JWT del venditore
+var id = id_example; // {{String}} order ID
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.updateOrderByID(authorization, id, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Orders-updateOrderByID-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Orders-updateOrderByID-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class updateOrderByIDExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new OrdersApi();
+            var authorization = authorization_example;  // String | token JWT del venditore
+            var id = id_example;  // String | order ID
+
+            try
+            {
+                // Update status
+                inline_response_200_1 result = apiInstance.updateOrderByID(authorization, id);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling OrdersApi.updateOrderByID: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Orders-updateOrderByID-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiOrdersApi();
+$authorization = authorization_example; // String | token JWT del venditore
+$id = id_example; // String | order ID
+
+try {
+    $result = $api_instance->updateOrderByID($authorization, $id);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling OrdersApi->updateOrderByID: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Orders-updateOrderByID-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::OrdersApi;
+
+my $api_instance = WWW::SwaggerClient::OrdersApi->new();
+my $authorization = authorization_example; # String | token JWT del venditore
+my $id = id_example; # String | order ID
+
+eval { 
+    my $result = $api_instance->updateOrderByID(authorization => $authorization, id => $id);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling OrdersApi->updateOrderByID: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Orders-updateOrderByID-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.OrdersApi()
+authorization = authorization_example # String | token JWT del venditore
+id = id_example # String | order ID
+
+try: 
+    # Update status
+    api_response = api_instance.update_order_by_id(authorization, id)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling OrdersApi->updateOrderByID: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+                            <div class="methodsubtabletitle">Path parameters</div>
+                            <table id="methodsubtable">
+                                <tr>
+                                  <th width="150px">Name</th>
+                                  <th>Description</th>
+                                </tr>
+                                  <tr><td style="width:150px;">id*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_updateOrderByID_id">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      String
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          order ID
+                                                      </div>
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                            </table>
+
+                            <div class="methodsubtabletitle">Header parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                  <tr><td style="width:150px;">Authorization*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_updateOrderByID_authorization">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      String
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          token JWT del venditore
+                                                      </div>
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                            </table>
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - order updated </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-updateOrderByID-200-schema">Schema</a>
+                                </li>
+
+                                  <li class="">
+                                    <a data-toggle="tab" href="#responses-updateOrderByID-200-example-0">Response Example</a>
+                                  </li>
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-updateOrderByID-200-schema">
+                                  <div id='responses-updateOrderByID-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "order updated",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/inline_response_200_1"
+      },
+      "example" : {
+        "status" : "success",
+        "message" : "stato dell'ordine aggiornato"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-updateOrderByID-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-updateOrderByID-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-updateOrderByID-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                                  <div class="tab-pane" id="responses-updateOrderByID-200-example-0">
+                                      <pre class="prettyprint"><code class="json">{&quot;status&quot;:&quot;success&quot;,&quot;message&quot;:&quot;stato dell&#x27;ordine aggiornato&quot;}</code></pre>
+                                </div>
+                            </div>
+
+                            <h3> Status: 400 - request error </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-updateOrderByID-400-schema">Schema</a>
+                                </li>
+
+                                  <li class="">
+                                    <a data-toggle="tab" href="#responses-updateOrderByID-400-example-0">Response Example</a>
+                                  </li>
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-updateOrderByID-400-schema">
+                                  <div id='responses-updateOrderByID-400-schema-400' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "request error",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/inline_response_200_1"
+      },
+      "example" : {
+        "status" : "error",
+        "message" : "richiesta fallita"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-updateOrderByID-400-schema-data').val(stringify(schema));
+                                        var result = $('#responses-updateOrderByID-400-schema-400');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-updateOrderByID-400-schema-data' type='hidden' value=''></input>
+                                </div>
+                                  <div class="tab-pane" id="responses-updateOrderByID-400-example-0">
+                                      <pre class="prettyprint"><code class="json">{&quot;status&quot;:&quot;error&quot;,&quot;message&quot;:&quot;richiesta fallita&quot;}</code></pre>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
                   </section>
                 <section id="api-Products">
                   <h1>Products</h1>
@@ -9947,7 +11256,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Products-getPDP-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/products/{id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/products/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Products-getPDP-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -10155,7 +11464,7 @@ except ApiException as e:
 
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - product didn&#x27;t found </h3>
+                            <h3> Status: 200 - product found </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
@@ -10173,7 +11482,7 @@ except ApiException as e:
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
-  "description" : "product didn't found",
+  "description" : "product found",
   "content" : {
     "application/json" : {
       "schema" : {
@@ -10185,10 +11494,11 @@ except ApiException as e:
           "id" : "XYZ123",
           "name" : "casetta",
           "description" : "Casetta in legno massello adattata a tutte le temperature",
-          "primaryPhoto" : "/image.jpg",
-          "secondaryPhotos" : [ "/image.jpg" ],
+          "primaryPhoto" : "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg",
+          "secondaryPhotos" : [ "https://www.tgtourism.tv/wp-content/uploads/2018/03/topolino.jpg" ],
           "category" : "casetta",
-          "price" : 9.99,
+          "netPrice" : 9.99,
+          "price" : 12.19,
           "tax" : 22,
           "show" : true,
           "showHome" : false,
@@ -10221,7 +11531,7 @@ except ApiException as e:
                                   <input id='responses-getPDP-200-schema-data' type='hidden' value=''></input>
                                 </div>
                                   <div class="tab-pane" id="responses-getPDP-200-example-0">
-                                      <pre class="prettyprint"><code class="json">{&quot;status&quot;:&quot;success&quot;,&quot;data&quot;:{&quot;id&quot;:&quot;XYZ123&quot;,&quot;name&quot;:&quot;casetta&quot;,&quot;description&quot;:&quot;Casetta in legno massello adattata a tutte le temperature&quot;,&quot;primaryPhoto&quot;:&quot;/image.jpg&quot;,&quot;secondaryPhotos&quot;:[&quot;/image.jpg&quot;],&quot;category&quot;:&quot;casetta&quot;,&quot;price&quot;:9.99,&quot;tax&quot;:22,&quot;show&quot;:true,&quot;showHome&quot;:false,&quot;stock&quot;:123}}</code></pre>
+                                      <pre class="prettyprint"><code class="json">{&quot;status&quot;:&quot;success&quot;,&quot;data&quot;:{&quot;id&quot;:&quot;XYZ123&quot;,&quot;name&quot;:&quot;casetta&quot;,&quot;description&quot;:&quot;Casetta in legno massello adattata a tutte le temperature&quot;,&quot;primaryPhoto&quot;:&quot;https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg&quot;,&quot;secondaryPhotos&quot;:[&quot;https://www.tgtourism.tv/wp-content/uploads/2018/03/topolino.jpg&quot;],&quot;category&quot;:&quot;casetta&quot;,&quot;netPrice&quot;:9.99,&quot;price&quot;:12.19,&quot;tax&quot;:22,&quot;show&quot;:true,&quot;showHome&quot;:false,&quot;stock&quot;:123}}</code></pre>
                                 </div>
                             </div>
 
@@ -10320,7 +11630,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Products-getProducts-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/products?minPrice=&maxPrice=&category=&sorting=&id-list="</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/products?minPrice=&maxPrice=&category=&sorting=&search="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Products-getProducts-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -10340,9 +11650,9 @@ public class ProductsApiExample {
         Long maxPrice = 789; // Long | 
         String category = category_example; // String | 
         String sorting = sorting_example; // String | 
-        array[String] idList = ; // array[String] | Array degli id dei prodotti che si vogliono ritornare
+        String search = search_example; // String | 
         try {
-            inline_response_200_3 result = apiInstance.getProducts(minPrice, maxPrice, category, sorting, idList);
+            inline_response_200_3 result = apiInstance.getProducts(minPrice, maxPrice, category, sorting, search);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ProductsApi#getProducts");
@@ -10363,9 +11673,9 @@ public class ProductsApiExample {
         Long maxPrice = 789; // Long | 
         String category = category_example; // String | 
         String sorting = sorting_example; // String | 
-        array[String] idList = ; // array[String] | Array degli id dei prodotti che si vogliono ritornare
+        String search = search_example; // String | 
         try {
-            inline_response_200_3 result = apiInstance.getProducts(minPrice, maxPrice, category, sorting, idList);
+            inline_response_200_3 result = apiInstance.getProducts(minPrice, maxPrice, category, sorting, search);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling ProductsApi#getProducts");
@@ -10383,7 +11693,7 @@ public class ProductsApiExample {
 Long *maxPrice = 789; //  (optional)
 String *category = category_example; //  (optional)
 String *sorting = sorting_example; //  (optional)
-array[String] *idList = ; // Array degli id dei prodotti che si vogliono ritornare (optional)
+String *search = search_example; //  (optional)
 
 ProductsApi *apiInstance = [[ProductsApi alloc] init];
 
@@ -10392,7 +11702,7 @@ ProductsApi *apiInstance = [[ProductsApi alloc] init];
     maxPrice:maxPrice
     category:category
     sorting:sorting
-    idList:idList
+    search:search
               completionHandler: ^(inline_response_200_3 output, NSError* error) {
                             if (output) {
                                 NSLog(@"%@", output);
@@ -10413,7 +11723,7 @@ var opts = {
   'maxPrice': 789, // {{Long}} 
   'category': category_example, // {{String}} 
   'sorting': sorting_example, // {{String}} 
-  'idList':  // {{array[String]}} Array degli id dei prodotti che si vogliono ritornare
+  'search': search_example // {{String}} 
 };
 var callback = function(error, data, response) {
   if (error) {
@@ -10448,12 +11758,12 @@ namespace Example
             var maxPrice = 789;  // Long |  (optional) 
             var category = category_example;  // String |  (optional) 
             var sorting = sorting_example;  // String |  (optional) 
-            var idList = new array[String](); // array[String] | Array degli id dei prodotti che si vogliono ritornare (optional) 
+            var search = search_example;  // String |  (optional) 
 
             try
             {
                 // Get products
-                inline_response_200_3 result = apiInstance.getProducts(minPrice, maxPrice, category, sorting, idList);
+                inline_response_200_3 result = apiInstance.getProducts(minPrice, maxPrice, category, sorting, search);
                 Debug.WriteLine(result);
             }
             catch (Exception e)
@@ -10475,10 +11785,10 @@ $minPrice = 789; // Long |
 $maxPrice = 789; // Long | 
 $category = category_example; // String | 
 $sorting = sorting_example; // String | 
-$idList = ; // array[String] | Array degli id dei prodotti che si vogliono ritornare
+$search = search_example; // String | 
 
 try {
-    $result = $api_instance->getProducts($minPrice, $maxPrice, $category, $sorting, $idList);
+    $result = $api_instance->getProducts($minPrice, $maxPrice, $category, $sorting, $search);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ProductsApi->getProducts: ', $e->getMessage(), PHP_EOL;
@@ -10496,10 +11806,10 @@ my $minPrice = 789; # Long |
 my $maxPrice = 789; # Long | 
 my $category = category_example; # String | 
 my $sorting = sorting_example; # String | 
-my $idList = []; # array[String] | Array degli id dei prodotti che si vogliono ritornare
+my $search = search_example; # String | 
 
 eval { 
-    my $result = $api_instance->getProducts(minPrice => $minPrice, maxPrice => $maxPrice, category => $category, sorting => $sorting, idList => $idList);
+    my $result = $api_instance->getProducts(minPrice => $minPrice, maxPrice => $maxPrice, category => $category, sorting => $sorting, search => $search);
     print Dumper($result);
 };
 if ($@) {
@@ -10520,11 +11830,11 @@ minPrice = 789 # Long |  (optional)
 maxPrice = 789 # Long |  (optional)
 category = category_example # String |  (optional)
 sorting = sorting_example # String |  (optional)
-idList =  # array[String] | Array degli id dei prodotti che si vogliono ritornare (optional)
+search = search_example # String |  (optional)
 
 try: 
     # Get products
-    api_response = api_instance.get_products(minPrice=minPrice, maxPrice=maxPrice, category=category, sorting=sorting, idList=idList)
+    api_response = api_instance.get_products(minPrice=minPrice, maxPrice=maxPrice, category=category, sorting=sorting, search=search)
     pprint(api_response)
 except ApiException as e:
     print("Exception when calling ProductsApi->getProducts: %s\n" % e)</code></pre>
@@ -10613,20 +11923,17 @@ except ApiException as e:
                                     </div>
                                 </td>
                                 </tr>
-                                <tr><td style="width:150px;">id-list</td>
+                                <tr><td style="width:150px;">search</td>
                                 <td>
                                 
                                 
-                                    <div id="d2e199_getProducts_idList">
+                                    <div id="d2e199_getProducts_search">
                                         <div class="json-schema-view">
                                             <div class="primitive">
                                                 <span class="type">
-                                                    array[String]
+                                                    String
                                                 </span>
                                 
-                                                    <div class="inner description">
-                                                        Array degli id dei prodotti che si vogliono ritornare
-                                                    </div>
                                             </div>
                                         </div>
                                     </div>
@@ -10665,10 +11972,11 @@ except ApiException as e:
           "id" : "123VF",
           "name" : "gioco",
           "description" : "descrizione del prodotto",
-          "primaryPhoto" : "/image.jpg",
-          "secondaryPhotos" : [ "/image.jpg" ],
+          "primaryPhoto" : "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg",
+          "secondaryPhotos" : [ "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg" ],
           "category" : "games",
-          "price" : 5.99,
+          "netPrice" : 10,
+          "price" : 12.2,
           "tax" : 22,
           "show" : true,
           "showHome" : false,
@@ -10677,10 +11985,11 @@ except ApiException as e:
           "id" : "321VF",
           "name" : "gioco2",
           "description" : "descrizione del prodotto",
-          "primaryPhoto" : "/image.jpg",
-          "secondaryPhotos" : [ "/image.jpg", "/image.jpg" ],
+          "primaryPhoto" : "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg",
+          "secondaryPhotos" : [ "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg", "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg" ],
           "category" : "games",
-          "price" : 7.99,
+          "netPrice" : 20,
+          "price" : 22,
           "tax" : 10,
           "show" : true,
           "showHome" : true,
@@ -10713,7 +12022,7 @@ except ApiException as e:
                                   <input id='responses-getProducts-200-schema-data' type='hidden' value=''></input>
                                 </div>
                                   <div class="tab-pane" id="responses-getProducts-200-example-0">
-                                      <pre class="prettyprint"><code class="json">{&quot;status&quot;:&quot;success&quot;,&quot;data&quot;:[{&quot;id&quot;:&quot;123VF&quot;,&quot;name&quot;:&quot;gioco&quot;,&quot;description&quot;:&quot;descrizione del prodotto&quot;,&quot;primaryPhoto&quot;:&quot;/image.jpg&quot;,&quot;secondaryPhotos&quot;:[&quot;/image.jpg&quot;],&quot;category&quot;:&quot;games&quot;,&quot;price&quot;:5.99,&quot;tax&quot;:22,&quot;show&quot;:true,&quot;showHome&quot;:false,&quot;stock&quot;:123},{&quot;id&quot;:&quot;321VF&quot;,&quot;name&quot;:&quot;gioco2&quot;,&quot;description&quot;:&quot;descrizione del prodotto&quot;,&quot;primaryPhoto&quot;:&quot;/image.jpg&quot;,&quot;secondaryPhotos&quot;:[&quot;/image.jpg&quot;,&quot;/image.jpg&quot;],&quot;category&quot;:&quot;games&quot;,&quot;price&quot;:7.99,&quot;tax&quot;:10,&quot;show&quot;:true,&quot;showHome&quot;:true,&quot;stock&quot;:0}]}</code></pre>
+                                      <pre class="prettyprint"><code class="json">{&quot;status&quot;:&quot;success&quot;,&quot;data&quot;:[{&quot;id&quot;:&quot;123VF&quot;,&quot;name&quot;:&quot;gioco&quot;,&quot;description&quot;:&quot;descrizione del prodotto&quot;,&quot;primaryPhoto&quot;:&quot;https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg&quot;,&quot;secondaryPhotos&quot;:[&quot;https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg&quot;],&quot;category&quot;:&quot;games&quot;,&quot;netPrice&quot;:10,&quot;price&quot;:12.2,&quot;tax&quot;:22,&quot;show&quot;:true,&quot;showHome&quot;:false,&quot;stock&quot;:123},{&quot;id&quot;:&quot;321VF&quot;,&quot;name&quot;:&quot;gioco2&quot;,&quot;description&quot;:&quot;descrizione del prodotto&quot;,&quot;primaryPhoto&quot;:&quot;https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg&quot;,&quot;secondaryPhotos&quot;:[&quot;https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg&quot;,&quot;https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg&quot;],&quot;category&quot;:&quot;games&quot;,&quot;netPrice&quot;:20,&quot;price&quot;:22,&quot;tax&quot;:10,&quot;show&quot;:true,&quot;showHome&quot;:true,&quot;stock&quot;:0}]}</code></pre>
                                 </div>
                             </div>
 
@@ -10813,7 +12122,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X PATCH\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/products/{id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/products/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Products-productsIdPatch-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -10831,7 +12140,7 @@ public class ProductsApiExample {
         ProductsApi apiInstance = new ProductsApi();
         Body_3 body = {
   "id" : "123VF",
-  "price" : 8
+  "netPrice" : 8
 }; // Body_3 | 
         String authorization = authorization_example; // String | token JWT
         String id = id_example; // String | 
@@ -10855,7 +12164,7 @@ public class ProductsApiExample {
         ProductsApi apiInstance = new ProductsApi();
         Body_3 body = {
   "id" : "123VF",
-  "price" : 8
+  "netPrice" : 8
 }; // Body_3 | 
         String authorization = authorization_example; // String | token JWT
         String id = id_example; // String | 
@@ -10876,7 +12185,7 @@ public class ProductsApiExample {
                             <div class="tab-pane" id="examples-Products-productsIdPatch-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">Body_3 *body = {
   "id" : "123VF",
-  "price" : 8
+  "netPrice" : 8
 }; // 
 String *authorization = authorization_example; // token JWT
 String *id = id_example; // 
@@ -10904,7 +12213,7 @@ ProductsApi *apiInstance = [[ProductsApi alloc] init];
 var api = new EmporioLambdaBe.ProductsApi()
 var body = {
   "id" : "123VF",
-  "price" : 8
+  "netPrice" : 8
 }; // {{Body_3}} 
 var authorization = authorization_example; // {{String}} token JWT
 var id = id_example; // {{String}} 
@@ -10965,7 +12274,7 @@ require_once(__DIR__ . '/vendor/autoload.php');
 $api_instance = new Swagger\Client\ApiProductsApi();
 $body = {
   "id" : "123VF",
-  "price" : 8
+  "netPrice" : 8
 }; // Body_3 | 
 $authorization = authorization_example; // String | token JWT
 $id = id_example; // String | 
@@ -11009,7 +12318,7 @@ from pprint import pprint
 api_instance = swagger_client.ProductsApi()
 body = {
   "id" : "123VF",
-  "price" : 8
+  "netPrice" : 8
 } # Body_3 | 
 authorization = authorization_example # String | token JWT
 id = id_example # String | 
@@ -11102,7 +12411,7 @@ except ApiException as e:
       },
       "example" : {
         "id" : "123VF",
-        "price" : 8
+        "netPrice" : 8
       }
     }
   },
@@ -11287,7 +12596,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/products"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/products"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Products-productsPost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -11306,9 +12615,11 @@ public class ProductsApiExample {
         Body_2 body = {
   "name" : "scarpe",
   "description" : "queste sono delle bellissime scarpe",
-  "price" : 50,
+  "netPrice" : 50,
   "tax" : 22,
-  "stock" : 5
+  "stock" : 5,
+  "primaryPhoto" : "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg",
+  "secondaryPhotos" : [ "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg", "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg" ]
 }; // Body_2 | 
         String authorization = authorization_example; // String | token JWT
         try {
@@ -11332,9 +12643,11 @@ public class ProductsApiExample {
         Body_2 body = {
   "name" : "scarpe",
   "description" : "queste sono delle bellissime scarpe",
-  "price" : 50,
+  "netPrice" : 50,
   "tax" : 22,
-  "stock" : 5
+  "stock" : 5,
+  "primaryPhoto" : "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg",
+  "secondaryPhotos" : [ "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg", "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg" ]
 }; // Body_2 | 
         String authorization = authorization_example; // String | token JWT
         try {
@@ -11355,9 +12668,11 @@ public class ProductsApiExample {
                               <pre class="prettyprint"><code class="language-cpp">Body_2 *body = {
   "name" : "scarpe",
   "description" : "queste sono delle bellissime scarpe",
-  "price" : 50,
+  "netPrice" : 50,
   "tax" : 22,
-  "stock" : 5
+  "stock" : 5,
+  "primaryPhoto" : "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg",
+  "secondaryPhotos" : [ "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg", "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg" ]
 }; // 
 String *authorization = authorization_example; // token JWT
 
@@ -11384,9 +12699,11 @@ var api = new EmporioLambdaBe.ProductsApi()
 var body = {
   "name" : "scarpe",
   "description" : "queste sono delle bellissime scarpe",
-  "price" : 50,
+  "netPrice" : 50,
   "tax" : 22,
-  "stock" : 5
+  "stock" : 5,
+  "primaryPhoto" : "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg",
+  "secondaryPhotos" : [ "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg", "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg" ]
 }; // {{Body_2}} 
 var authorization = authorization_example; // {{String}} token JWT
 
@@ -11446,9 +12763,11 @@ $api_instance = new Swagger\Client\ApiProductsApi();
 $body = {
   "name" : "scarpe",
   "description" : "queste sono delle bellissime scarpe",
-  "price" : 50,
+  "netPrice" : 50,
   "tax" : 22,
-  "stock" : 5
+  "stock" : 5,
+  "primaryPhoto" : "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg",
+  "secondaryPhotos" : [ "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg", "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg" ]
 }; // Body_2 | 
 $authorization = authorization_example; // String | token JWT
 
@@ -11491,9 +12810,11 @@ api_instance = swagger_client.ProductsApi()
 body = {
   "name" : "scarpe",
   "description" : "queste sono delle bellissime scarpe",
-  "price" : 50,
+  "netPrice" : 50,
   "tax" : 22,
-  "stock" : 5
+  "stock" : 5,
+  "primaryPhoto" : "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg",
+  "secondaryPhotos" : [ "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg", "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg" ]
 } # Body_2 | 
 authorization = authorization_example # String | token JWT
 
@@ -11560,9 +12881,11 @@ except ApiException as e:
       "example" : {
         "name" : "scarpe",
         "description" : "queste sono delle bellissime scarpe",
-        "price" : 50,
+        "netPrice" : 50,
         "tax" : 22,
-        "stock" : 5
+        "stock" : 5,
+        "primaryPhoto" : "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg",
+        "secondaryPhotos" : [ "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg", "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg" ]
       }
     }
   },
@@ -11746,7 +13069,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Products-removeProduct-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/products/{id}?override="</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/products/{id}?override="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Products-removeProduct-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -12182,7 +13505,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/taxes"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/taxes"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Taxes-createTax-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -12620,7 +13943,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Taxes-getTax-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/taxes/{id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/taxes/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Taxes-getTax-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -12985,7 +14308,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Taxes-getTaxes-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/taxes"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/taxes"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Taxes-getTaxes-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -13327,7 +14650,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Taxes-removeTax-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/taxes/{id}?override="</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/taxes/{id}?override="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Taxes-removeTax-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -13760,7 +15083,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X PATCH\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/taxes/{id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/taxes/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Taxes-updateTax-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -14202,6 +15525,373 @@ except ApiException as e:
                   </section>
                 <section id="api-Users">
                   <h1>Users</h1>
+                    <div id="api-Users-checkJWT">
+                      <article id="api-Users-checkJWT-0" data-group="User" data-name="checkJWT" data-version="0">
+                        <div class="pull-left">
+                          <h1>checkJWT</h1>
+                          <p>check JWT token</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">return the validity status of the JWT and its type (customer/vendor)</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/users/check/{token}</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Users-checkJWT-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Users-checkJWT-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Users-checkJWT-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Users-checkJWT-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Users-checkJWT-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Users-checkJWT-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Users-checkJWT-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Users-checkJWT-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Users-checkJWT-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Users-checkJWT-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Users-checkJWT-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Users-checkJWT-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
+-H "Accept: application/json"\
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/users/check/{token}"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Users-checkJWT-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.UsersApi;
+
+import java.io.File;
+import java.util.*;
+
+public class UsersApiExample {
+
+    public static void main(String[] args) {
+        
+        UsersApi apiInstance = new UsersApi();
+        String token = token_example; // String | token JWT
+        try {
+            inline_response_200_12 result = apiInstance.checkJWT(token);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling UsersApi#checkJWT");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Users-checkJWT-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.UsersApi;
+
+public class UsersApiExample {
+
+    public static void main(String[] args) {
+        UsersApi apiInstance = new UsersApi();
+        String token = token_example; // String | token JWT
+        try {
+            inline_response_200_12 result = apiInstance.checkJWT(token);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling UsersApi#checkJWT");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Users-checkJWT-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Users-checkJWT-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">String *token = token_example; // token JWT
+
+UsersApi *apiInstance = [[UsersApi alloc] init];
+
+// check JWT token
+[apiInstance checkJWTWith:token
+              completionHandler: ^(inline_response_200_12 output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Users-checkJWT-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var EmporioLambdaBe = require('emporio_lambda_be');
+
+var api = new EmporioLambdaBe.UsersApi()
+var token = token_example; // {{String}} token JWT
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.checkJWT(token, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Users-checkJWT-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Users-checkJWT-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class checkJWTExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new UsersApi();
+            var token = token_example;  // String | token JWT
+
+            try
+            {
+                // check JWT token
+                inline_response_200_12 result = apiInstance.checkJWT(token);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling UsersApi.checkJWT: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Users-checkJWT-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiUsersApi();
+$token = token_example; // String | token JWT
+
+try {
+    $result = $api_instance->checkJWT($token);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling UsersApi->checkJWT: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Users-checkJWT-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::UsersApi;
+
+my $api_instance = WWW::SwaggerClient::UsersApi->new();
+my $token = token_example; # String | token JWT
+
+eval { 
+    my $result = $api_instance->checkJWT(token => $token);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling UsersApi->checkJWT: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Users-checkJWT-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.UsersApi()
+token = token_example # String | token JWT
+
+try: 
+    # check JWT token
+    api_response = api_instance.check_jwt(token)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling UsersApi->checkJWT: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+                            <div class="methodsubtabletitle">Path parameters</div>
+                            <table id="methodsubtable">
+                                <tr>
+                                  <th width="150px">Name</th>
+                                  <th>Description</th>
+                                </tr>
+                                  <tr><td style="width:150px;">token*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_checkJWT_token">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      String
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          token JWT
+                                                      </div>
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                            </table>
+
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - valid token </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-checkJWT-200-schema">Schema</a>
+                                </li>
+
+                                  <li class="">
+                                    <a data-toggle="tab" href="#responses-checkJWT-200-example-0">Response Example</a>
+                                  </li>
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-checkJWT-200-schema">
+                                  <div id='responses-checkJWT-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "valid token",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/inline_response_200_12"
+      },
+      "example" : {
+        "status" : "success",
+        "data" : {
+          "username" : "1234",
+          "type" : "customer"
+        }
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-checkJWT-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-checkJWT-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-checkJWT-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                                  <div class="tab-pane" id="responses-checkJWT-200-example-0">
+                                      <pre class="prettyprint"><code class="json">{&quot;status&quot;:&quot;success&quot;,&quot;data&quot;:{&quot;username&quot;:&quot;1234&quot;,&quot;type&quot;:&quot;customer&quot;}}</code></pre>
+                                </div>
+                            </div>
+
+                            <h3> Status: 400 - not valid token </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-checkJWT-400-schema">Schema</a>
+                                </li>
+
+                                  <li class="">
+                                    <a data-toggle="tab" href="#responses-checkJWT-400-example-0">Response Example</a>
+                                  </li>
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-checkJWT-400-schema">
+                                  <div id='responses-checkJWT-400-schema-400' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "not valid token",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/inline_response_200_1"
+      },
+      "example" : {
+        "status" : "error",
+        "message" : "invalid token"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-checkJWT-400-schema-data').val(stringify(schema));
+                                        var result = $('#responses-checkJWT-400-schema-400');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-checkJWT-400-schema-data' type='hidden' value=''></input>
+                                </div>
+                                  <div class="tab-pane" id="responses-checkJWT-400-example-0">
+                                      <pre class="prettyprint"><code class="json">{&quot;status&quot;:&quot;error&quot;,&quot;message&quot;:&quot;invalid token&quot;}</code></pre>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
                     <div id="api-Users-checkUserJWT">
                       <article id="api-Users-checkUserJWT-0" data-group="User" data-name="checkUserJWT" data-version="0">
                         <div class="pull-left">
@@ -14236,7 +15926,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Users-checkUserJWT-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/users/customers/check/{token}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/users/customers/check/{token}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Users-checkUserJWT-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -14602,7 +16292,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Users-checkUserJWT1-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/users/vendors/check/{token}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/users/vendors/check/{token}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Users-checkUserJWT1-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -14968,7 +16658,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Users-getCustomer-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/users/customers/{username}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/users/customers/{username}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Users-getCustomer-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -15389,7 +17079,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Users-getCustomers-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/users/customers"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/users/customers"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Users-getCustomers-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -15735,373 +17425,6 @@ except ApiException as e:
                                 </div>
                                   <div class="tab-pane" id="responses-getCustomers-400-example-0">
                                       <pre class="prettyprint"><code class="json">{&quot;status&quot;:&quot;error&quot;,&quot;message&quot;:&quot;list not returned&quot;}</code></pre>
-                                </div>
-                            </div>
-
-                        </article>
-                      </div>
-                      <hr>
-                    <div id="api-Users-usersCheckTokenGet">
-                      <article id="api-Users-usersCheckTokenGet-0" data-group="User" data-name="usersCheckTokenGet" data-version="0">
-                        <div class="pull-left">
-                          <h1>usersCheckTokenGet</h1>
-                          <p>check JWT token</p>
-                        </div>
-                        <div class="pull-right"></div>
-                        <div class="clearfix"></div>
-                        <p></p>
-                        <p class="marked">return the validity status of the JWT and its type (customer/vendor)</p>
-                        <p></p>
-                        <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/users/check/{token}</span></code></pre>
-                        <p>
-                          <h3>Usage and SDK Samples</h3>
-                        </p>
-                        <ul class="nav nav-tabs nav-tabs-examples">
-                          <li class="active"><a href="#examples-Users-usersCheckTokenGet-0-curl">Curl</a></li>
-                          <li class=""><a href="#examples-Users-usersCheckTokenGet-0-java">Java</a></li>
-                          <li class=""><a href="#examples-Users-usersCheckTokenGet-0-android">Android</a></li>
-                          <!--<li class=""><a href="#examples-Users-usersCheckTokenGet-0-groovy">Groovy</a></li>-->
-                          <li class=""><a href="#examples-Users-usersCheckTokenGet-0-objc">Obj-C</a></li>
-                          <li class=""><a href="#examples-Users-usersCheckTokenGet-0-javascript">JavaScript</a></li>
-                          <!--<li class=""><a href="#examples-Users-usersCheckTokenGet-0-angular">Angular</a></li>-->
-                          <li class=""><a href="#examples-Users-usersCheckTokenGet-0-csharp">C#</a></li>
-                          <li class=""><a href="#examples-Users-usersCheckTokenGet-0-php">PHP</a></li>
-                          <li class=""><a href="#examples-Users-usersCheckTokenGet-0-perl">Perl</a></li>
-                          <li class=""><a href="#examples-Users-usersCheckTokenGet-0-python">Python</a></li>
-                        </ul>
-
-                        <div class="tab-content">
-                          <div class="tab-pane active" id="examples-Users-usersCheckTokenGet-0-curl">
-                           <pre class="prettyprint"><code class="language-bsh">curl -X GET\
--H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.3.0/users/check/{token}"</code></pre>
-                          </div>
-                          <div class="tab-pane" id="examples-Users-usersCheckTokenGet-0-java">
-                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
-import io.swagger.client.auth.*;
-import io.swagger.client.model.*;
-import io.swagger.client.api.UsersApi;
-
-import java.io.File;
-import java.util.*;
-
-public class UsersApiExample {
-
-    public static void main(String[] args) {
-        
-        UsersApi apiInstance = new UsersApi();
-        String token = token_example; // String | token JWT
-        try {
-            inline_response_200_12 result = apiInstance.usersCheckTokenGet(token);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling UsersApi#usersCheckTokenGet");
-            e.printStackTrace();
-        }
-    }
-}</code></pre>
-                          </div>
-
-                          <div class="tab-pane" id="examples-Users-usersCheckTokenGet-0-android">
-                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.UsersApi;
-
-public class UsersApiExample {
-
-    public static void main(String[] args) {
-        UsersApi apiInstance = new UsersApi();
-        String token = token_example; // String | token JWT
-        try {
-            inline_response_200_12 result = apiInstance.usersCheckTokenGet(token);
-            System.out.println(result);
-        } catch (ApiException e) {
-            System.err.println("Exception when calling UsersApi#usersCheckTokenGet");
-            e.printStackTrace();
-        }
-    }
-}</code></pre>
-                          </div>
-  <!--
-  <div class="tab-pane" id="examples-Users-usersCheckTokenGet-0-groovy">
-  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
-  </div> -->
-                            <div class="tab-pane" id="examples-Users-usersCheckTokenGet-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">String *token = token_example; // token JWT
-
-UsersApi *apiInstance = [[UsersApi alloc] init];
-
-// check JWT token
-[apiInstance usersCheckTokenGetWith:token
-              completionHandler: ^(inline_response_200_12 output, NSError* error) {
-                            if (output) {
-                                NSLog(@"%@", output);
-                            }
-                            if (error) {
-                                NSLog(@"Error: %@", error);
-                            }
-                        }];
-</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Users-usersCheckTokenGet-0-javascript">
-                              <pre class="prettyprint"><code class="language-js">var EmporioLambdaBe = require('emporio_lambda_be');
-
-var api = new EmporioLambdaBe.UsersApi()
-var token = token_example; // {{String}} token JWT
-
-var callback = function(error, data, response) {
-  if (error) {
-    console.error(error);
-  } else {
-    console.log('API called successfully. Returned data: ' + data);
-  }
-};
-api.usersCheckTokenGet(token, callback);
-</code></pre>
-                            </div>
-
-                            <!--<div class="tab-pane" id="examples-Users-usersCheckTokenGet-0-angular">
-              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
-            </div>-->
-                            <div class="tab-pane" id="examples-Users-usersCheckTokenGet-0-csharp">
-                              <pre class="prettyprint"><code class="language-cs">using System;
-using System.Diagnostics;
-using IO.Swagger.Api;
-using IO.Swagger.Client;
-using IO.Swagger.Model;
-
-namespace Example
-{
-    public class usersCheckTokenGetExample
-    {
-        public void main()
-        {
-
-            var apiInstance = new UsersApi();
-            var token = token_example;  // String | token JWT
-
-            try
-            {
-                // check JWT token
-                inline_response_200_12 result = apiInstance.usersCheckTokenGet(token);
-                Debug.WriteLine(result);
-            }
-            catch (Exception e)
-            {
-                Debug.Print("Exception when calling UsersApi.usersCheckTokenGet: " + e.Message );
-            }
-        }
-    }
-}
-</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Users-usersCheckTokenGet-0-php">
-                              <pre class="prettyprint"><code class="language-php"><&#63;php
-require_once(__DIR__ . '/vendor/autoload.php');
-
-$api_instance = new Swagger\Client\ApiUsersApi();
-$token = token_example; // String | token JWT
-
-try {
-    $result = $api_instance->usersCheckTokenGet($token);
-    print_r($result);
-} catch (Exception $e) {
-    echo 'Exception when calling UsersApi->usersCheckTokenGet: ', $e->getMessage(), PHP_EOL;
-}
-?></code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Users-usersCheckTokenGet-0-perl">
-                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
-use WWW::SwaggerClient::Configuration;
-use WWW::SwaggerClient::UsersApi;
-
-my $api_instance = WWW::SwaggerClient::UsersApi->new();
-my $token = token_example; # String | token JWT
-
-eval { 
-    my $result = $api_instance->usersCheckTokenGet(token => $token);
-    print Dumper($result);
-};
-if ($@) {
-    warn "Exception when calling UsersApi->usersCheckTokenGet: $@\n";
-}</code></pre>
-                            </div>
-
-                            <div class="tab-pane" id="examples-Users-usersCheckTokenGet-0-python">
-                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
-import time
-import swagger_client
-from swagger_client.rest import ApiException
-from pprint import pprint
-
-# create an instance of the API class
-api_instance = swagger_client.UsersApi()
-token = token_example # String | token JWT
-
-try: 
-    # check JWT token
-    api_response = api_instance.users_check_token_get(token)
-    pprint(api_response)
-except ApiException as e:
-    print("Exception when calling UsersApi->usersCheckTokenGet: %s\n" % e)</code></pre>
-                            </div>
-                          </div>
-
-                          <h2>Parameters</h2>
-
-                            <div class="methodsubtabletitle">Path parameters</div>
-                            <table id="methodsubtable">
-                                <tr>
-                                  <th width="150px">Name</th>
-                                  <th>Description</th>
-                                </tr>
-                                  <tr><td style="width:150px;">token*</td>
-                                  <td>
-                                  
-                                  
-                                      <div id="d2e199_usersCheckTokenGet_token">
-                                          <div class="json-schema-view">
-                                              <div class="primitive">
-                                                  <span class="type">
-                                                      String
-                                                  </span>
-                                  
-                                                      <div class="inner description">
-                                                          token JWT
-                                                      </div>
-                                              </div>
-                                                  <div class="inner required">
-                                                      Required
-                                                  </div>
-                                          </div>
-                                      </div>
-                                  </td>
-                                  </tr>
-                            </table>
-
-
-
-
-
-                          <h2>Responses</h2>
-                            <h3> Status: 200 - valid token </h3>
-
-                            <ul class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-usersCheckTokenGet-200-schema">Schema</a>
-                                </li>
-
-                                  <li class="">
-                                    <a data-toggle="tab" href="#responses-usersCheckTokenGet-200-example-0">Response Example</a>
-                                  </li>
-                            </ul>
-
-                            <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-usersCheckTokenGet-200-schema">
-                                  <div id='responses-usersCheckTokenGet-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "valid token",
-  "content" : {
-    "application/json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/inline_response_200_12"
-      },
-      "example" : {
-        "status" : "success",
-        "data" : {
-          "username" : "1234",
-          "type" : "customer"
-        }
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.content["application/json"].schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.components = {};
-                                          schemaWrapper.components.schemas = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        //console.log(JSON.stringify(schema));
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-usersCheckTokenGet-200-schema-data').val(stringify(schema));
-                                        var result = $('#responses-usersCheckTokenGet-200-schema-200');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-usersCheckTokenGet-200-schema-data' type='hidden' value=''></input>
-                                </div>
-                                  <div class="tab-pane" id="responses-usersCheckTokenGet-200-example-0">
-                                      <pre class="prettyprint"><code class="json">{&quot;status&quot;:&quot;success&quot;,&quot;data&quot;:{&quot;username&quot;:&quot;1234&quot;,&quot;type&quot;:&quot;customer&quot;}}</code></pre>
-                                </div>
-                            </div>
-
-                            <h3> Status: 400 - not valid token </h3>
-
-                            <ul class="nav nav-tabs nav-tabs-examples" >
-                                <li class="active">
-                                  <a data-toggle="tab" href="#responses-usersCheckTokenGet-400-schema">Schema</a>
-                                </li>
-
-                                  <li class="">
-                                    <a data-toggle="tab" href="#responses-usersCheckTokenGet-400-example-0">Response Example</a>
-                                  </li>
-                            </ul>
-
-                            <div class="tab-content" style='margin-bottom: 10px;'>
-                                <div class="tab-pane active" id="responses-usersCheckTokenGet-400-schema">
-                                  <div id='responses-usersCheckTokenGet-400-schema-400' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
-                                    <script>
-                                      $(document).ready(function() {
-                                        var schemaWrapper = {
-  "description" : "not valid token",
-  "content" : {
-    "application/json" : {
-      "schema" : {
-        "$ref" : "#/components/schemas/inline_response_200_1"
-      },
-      "example" : {
-        "status" : "error",
-        "message" : "invalid token"
-      }
-    }
-  }
-};
-                                        var schema = schemaWrapper.content["application/json"].schema;
-                                        if (schema.$ref != null) {
-                                          schema = defsParser.$refs.get(schema.$ref);
-                                        } else {
-                                          schemaWrapper.components = {};
-                                          schemaWrapper.components.schemas = Object.assign({}, defs);
-                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
-                                            console.log(err);
-                                          });
-                                        }
-
-                                        //console.log(JSON.stringify(schema));
-                                        var view = new JSONSchemaView(schema, 3);
-                                        $('#responses-usersCheckTokenGet-400-schema-data').val(stringify(schema));
-                                        var result = $('#responses-usersCheckTokenGet-400-schema-400');
-                                        result.empty();
-                                        result.append(view.render());
-                                      });
-                                    </script>
-                                  </div>
-                                  <input id='responses-usersCheckTokenGet-400-schema-data' type='hidden' value=''></input>
-                                </div>
-                                  <div class="tab-pane" id="responses-usersCheckTokenGet-400-example-0">
-                                      <pre class="prettyprint"><code class="json">{&quot;status&quot;:&quot;error&quot;,&quot;message&quot;:&quot;invalid token&quot;}</code></pre>
                                 </div>
                             </div>
 
