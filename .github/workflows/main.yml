@@ -1,0 +1,11 @@
+name: build OpenAPI
+on: push
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: script
+        run: ../buildOpenAPI.sh
+        shell: bash
