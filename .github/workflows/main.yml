@@ -7,5 +7,5 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: script
-        run: ${GITHUB_WORKSPACE}/buildOpenAPI.sh
+        run: ${GITHUB_WORKSPACE}/buildOpenAPI.sh --install
         shell: bash
