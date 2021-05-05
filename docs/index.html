@@ -788,7 +788,7 @@
       },
       "stock" : {
         "minimum" : 0,
-        "type" : "integer",
+        "type" : "number",
         "format" : "int64"
       }
     }
@@ -797,67 +797,63 @@
   } ]
 };
             defs["body_3"] = {
-  "allOf" : [ {
-    "type" : "object",
-    "properties" : {
-      "id" : {
-        "minLength" : 1,
+  "type" : "object",
+  "properties" : {
+    "id" : {
+      "minLength" : 1,
+      "type" : "string"
+    },
+    "name" : {
+      "maxLength" : 50,
+      "minLength" : 1,
+      "type" : "string"
+    },
+    "description" : {
+      "maxLength" : 250,
+      "minLength" : 1,
+      "type" : "string"
+    },
+    "primaryPhoto" : {
+      "minLength" : 1,
+      "type" : "string"
+    },
+    "secondaryPhotos" : {
+      "maxItems" : 4,
+      "uniqueItems" : true,
+      "type" : "array",
+      "items" : {
         "type" : "string"
-      },
-      "name" : {
-        "maxLength" : 50,
-        "minLength" : 1,
-        "type" : "string"
-      },
-      "description" : {
-        "maxLength" : 250,
-        "minLength" : 1,
-        "type" : "string"
-      },
-      "primaryPhoto" : {
-        "minLength" : 1,
-        "type" : "string"
-      },
-      "secondaryPhotos" : {
-        "maxItems" : 4,
-        "uniqueItems" : true,
-        "type" : "array",
-        "items" : {
-          "type" : "string"
-        }
-      },
-      "category" : {
-        "minLength" : 1,
-        "type" : "string"
-      },
-      "price" : {
-        "minimum" : 0,
-        "type" : "number",
-        "format" : "float"
-      },
-      "netPrice" : {
-        "minimum" : 0,
-        "type" : "number",
-        "format" : "float"
-      },
-      "tax" : {
-        "type" : "number"
-      },
-      "show" : {
-        "type" : "boolean"
-      },
-      "showHome" : {
-        "type" : "boolean"
-      },
-      "stock" : {
-        "minimum" : 0,
-        "type" : "integer",
-        "format" : "int64"
       }
+    },
+    "category" : {
+      "minLength" : 1,
+      "type" : "string"
+    },
+    "price" : {
+      "minimum" : 0,
+      "type" : "number",
+      "format" : "float"
+    },
+    "netPrice" : {
+      "minimum" : 0,
+      "type" : "number",
+      "format" : "float"
+    },
+    "tax" : {
+      "type" : "number"
+    },
+    "show" : {
+      "type" : "boolean"
+    },
+    "showHome" : {
+      "type" : "boolean"
+    },
+    "stock" : {
+      "minimum" : 0,
+      "type" : "number",
+      "format" : "int64"
     }
-  }, {
-    "required" : [ "id" ]
-  } ]
+  }
 };
             defs["body_4"] = {
   "allOf" : [ {
@@ -896,10 +892,10 @@
   } ]
 };
             defs["body_6"] = {
-  "required" : [ "productId", "quantity" ],
+  "required" : [ "id", "quantity" ],
   "type" : "object",
   "properties" : {
-    "productId" : {
+    "id" : {
       "minLength" : 1,
       "type" : "string"
     },
@@ -910,10 +906,10 @@
   }
 };
             defs["body_7"] = {
-  "required" : [ "productId", "quantity" ],
+  "required" : [ "id", "quantity" ],
   "type" : "object",
   "properties" : {
-    "productId" : {
+    "id" : {
       "minLength" : 1,
       "type" : "string"
     },
@@ -1421,7 +1417,7 @@
             },
             "stock" : {
               "minimum" : 0,
-              "type" : "integer",
+              "type" : "number",
               "format" : "int64"
             }
           }
@@ -1500,7 +1496,7 @@
           },
           "stock" : {
             "minimum" : 0,
-            "type" : "integer",
+            "type" : "number",
             "format" : "int64"
           }
         }
@@ -1608,10 +1604,10 @@
             "uniqueItems" : true,
             "type" : "array",
             "items" : {
-              "required" : [ "name", "price", "primaryPhoto", "productId", "quantity", "tax", "total" ],
+              "required" : [ "id", "name", "price", "primaryPhoto", "quantity", "tax", "total" ],
               "type" : "object",
               "properties" : {
-                "productId" : {
+                "id" : {
                   "minLength" : 1,
                   "type" : "string"
                 },
@@ -1811,6 +1807,9 @@
                     <li data-group="Cart" data-name="addToCart" class="">
                       <a href="#api-Cart-addToCart">addToCart</a>
                     </li>
+                    <li data-group="Cart" data-name="authCart" class="">
+                      <a href="#api-Cart-authCart">authCart</a>
+                    </li>
                     <li data-group="Cart" data-name="changeQuantity" class="">
                       <a href="#api-Cart-changeQuantity">changeQuantity</a>
                     </li>
@@ -1923,7 +1922,7 @@
         <div id="header">
           <div id="api-_">
             <h2 id="welcome-to-apidoc">API and SDK Documentation</h2>
-              <div class="app-desc">Version: 0.4.1</div>
+              <div class="app-desc">Version: 0.4.2</div>
             <hr>
             <div>Queste sono le OpenAPI per EmporioLambda</div>
           </div>
@@ -1965,7 +1964,7 @@
                           <div class="tab-pane active" id="examples-Addresses-getAddress-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/addresses/{id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/addresses/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Addresses-getAddress-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -2373,7 +2372,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Addresses-getAddresses-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/addresses"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/addresses"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Addresses-getAddresses-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -2768,7 +2767,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/addresses"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/addresses"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Addresses-insertAddress-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -3248,7 +3247,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Addresses-removeAddress-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/addresses/{id}?override="</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/addresses/{id}?override="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Addresses-removeAddress-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -3681,7 +3680,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X PATCH\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/addresses/{id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/addresses/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Addresses-updateAddress-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -4158,7 +4157,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/cart"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/cart"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Cart-addToCart-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -4175,7 +4174,7 @@ public class CartApiExample {
         
         CartApi apiInstance = new CartApi();
         Body_6 body = {
-  "productId" : "1234",
+  "id" : "1234",
   "quantity" : 2
 }; // Body_6 | 
         String authorization = authorization_example; // String | token JWT
@@ -4199,7 +4198,7 @@ public class CartApiExample {
     public static void main(String[] args) {
         CartApi apiInstance = new CartApi();
         Body_6 body = {
-  "productId" : "1234",
+  "id" : "1234",
   "quantity" : 2
 }; // Body_6 | 
         String authorization = authorization_example; // String | token JWT
@@ -4220,7 +4219,7 @@ public class CartApiExample {
   </div> -->
                             <div class="tab-pane" id="examples-Cart-addToCart-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">Body_6 *body = {
-  "productId" : "1234",
+  "id" : "1234",
   "quantity" : 2
 }; // 
 String *authorization = authorization_example; // token JWT (optional)
@@ -4248,7 +4247,7 @@ CartApi *apiInstance = [[CartApi alloc] init];
 
 var api = new EmporioLambdaBe.CartApi()
 var body = {
-  "productId" : "1234",
+  "id" : "1234",
   "quantity" : 2
 }; // {{Body_6}} 
 var opts = { 
@@ -4310,7 +4309,7 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiCartApi();
 $body = {
-  "productId" : "1234",
+  "id" : "1234",
   "quantity" : 2
 }; // Body_6 | 
 $authorization = authorization_example; // String | token JWT
@@ -4354,7 +4353,7 @@ from pprint import pprint
 # create an instance of the API class
 api_instance = swagger_client.CartApi()
 body = {
-  "productId" : "1234",
+  "id" : "1234",
   "quantity" : 2
 } # Body_6 | 
 authorization = authorization_example # String | token JWT (optional)
@@ -4434,7 +4433,7 @@ except ApiException as e:
         "$ref" : "#/components/schemas/body_6"
       },
       "example" : {
-        "productId" : "1234",
+        "id" : "1234",
         "quantity" : 2
       }
     }
@@ -4585,6 +4584,398 @@ except ApiException as e:
                         </article>
                       </div>
                       <hr>
+                    <div id="api-Cart-authCart">
+                      <article id="api-Cart-authCart-0" data-group="User" data-name="authCart" data-version="0">
+                        <div class="pull-left">
+                          <h1>authCart</h1>
+                          <p>authenticate cart</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked">pass a guest cart to an authenticated cart</p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="patch"><code><span class="pln">/cart</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Cart-authCart-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Cart-authCart-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Cart-authCart-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Cart-authCart-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Cart-authCart-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Cart-authCart-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Cart-authCart-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Cart-authCart-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Cart-authCart-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Cart-authCart-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Cart-authCart-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Cart-authCart-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X PATCH\
+-H "Accept: application/json"\
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/cart"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Cart-authCart-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.CartApi;
+
+import java.io.File;
+import java.util.*;
+
+public class CartApiExample {
+
+    public static void main(String[] args) {
+        
+        CartApi apiInstance = new CartApi();
+        String authorization = authorization_example; // String | token JWT
+        String guestToken = guestToken_example; // String | 
+        try {
+            inline_response_200_1 result = apiInstance.authCart(authorization, guestToken);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling CartApi#authCart");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Cart-authCart-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.CartApi;
+
+public class CartApiExample {
+
+    public static void main(String[] args) {
+        CartApi apiInstance = new CartApi();
+        String authorization = authorization_example; // String | token JWT
+        String guestToken = guestToken_example; // String | 
+        try {
+            inline_response_200_1 result = apiInstance.authCart(authorization, guestToken);
+            System.out.println(result);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling CartApi#authCart");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Cart-authCart-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Cart-authCart-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">String *authorization = authorization_example; // token JWT
+String *guestToken = guestToken_example; // 
+
+CartApi *apiInstance = [[CartApi alloc] init];
+
+// authenticate cart
+[apiInstance authCartWith:authorization
+    guestToken:guestToken
+              completionHandler: ^(inline_response_200_1 output, NSError* error) {
+                            if (output) {
+                                NSLog(@"%@", output);
+                            }
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Cart-authCart-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var EmporioLambdaBe = require('emporio_lambda_be');
+
+var api = new EmporioLambdaBe.CartApi()
+var authorization = authorization_example; // {{String}} token JWT
+var guestToken = guestToken_example; // {{String}} 
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully. Returned data: ' + data);
+  }
+};
+api.authCart(authorization, guestToken, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Cart-authCart-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Cart-authCart-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class authCartExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new CartApi();
+            var authorization = authorization_example;  // String | token JWT
+            var guestToken = guestToken_example;  // String | 
+
+            try
+            {
+                // authenticate cart
+                inline_response_200_1 result = apiInstance.authCart(authorization, guestToken);
+                Debug.WriteLine(result);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling CartApi.authCart: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Cart-authCart-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiCartApi();
+$authorization = authorization_example; // String | token JWT
+$guestToken = guestToken_example; // String | 
+
+try {
+    $result = $api_instance->authCart($authorization, $guestToken);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling CartApi->authCart: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Cart-authCart-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::CartApi;
+
+my $api_instance = WWW::SwaggerClient::CartApi->new();
+my $authorization = authorization_example; # String | token JWT
+my $guestToken = guestToken_example; # String | 
+
+eval { 
+    my $result = $api_instance->authCart(authorization => $authorization, guestToken => $guestToken);
+    print Dumper($result);
+};
+if ($@) {
+    warn "Exception when calling CartApi->authCart: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Cart-authCart-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.CartApi()
+authorization = authorization_example # String | token JWT
+guestToken = guestToken_example # String | 
+
+try: 
+    # authenticate cart
+    api_response = api_instance.auth_cart(authorization, guestToken)
+    pprint(api_response)
+except ApiException as e:
+    print("Exception when calling CartApi->authCart: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+                            <div class="methodsubtabletitle">Header parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                  <tr><td style="width:150px;">Authorization*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_authCart_authorization">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      String
+                                                  </span>
+                                  
+                                                      <div class="inner description">
+                                                          token JWT
+                                                      </div>
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                                  <tr><td style="width:150px;">guestToken*</td>
+                                  <td>
+                                  
+                                  
+                                      <div id="d2e199_authCart_guestToken">
+                                          <div class="json-schema-view">
+                                              <div class="primitive">
+                                                  <span class="type">
+                                                      String
+                                                  </span>
+                                  
+                                              </div>
+                                                  <div class="inner required">
+                                                      Required
+                                                  </div>
+                                          </div>
+                                      </div>
+                                  </td>
+                                  </tr>
+                            </table>
+
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - cart authenticated </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-authCart-200-schema">Schema</a>
+                                </li>
+
+                                  <li class="">
+                                    <a data-toggle="tab" href="#responses-authCart-200-example-0">Response Example</a>
+                                  </li>
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-authCart-200-schema">
+                                  <div id='responses-authCart-200-schema-200' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "cart authenticated",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/inline_response_200_1"
+      },
+      "example" : {
+        "status" : "success",
+        "message" : "success"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-authCart-200-schema-data').val(stringify(schema));
+                                        var result = $('#responses-authCart-200-schema-200');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-authCart-200-schema-data' type='hidden' value=''></input>
+                                </div>
+                                  <div class="tab-pane" id="responses-authCart-200-example-0">
+                                      <pre class="prettyprint"><code class="json">{&quot;status&quot;:&quot;success&quot;,&quot;message&quot;:&quot;success&quot;}</code></pre>
+                                </div>
+                            </div>
+
+                            <h3> Status: 400 - product not added to cart&quot; </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                                <li class="active">
+                                  <a data-toggle="tab" href="#responses-authCart-400-schema">Schema</a>
+                                </li>
+
+                                  <li class="">
+                                    <a data-toggle="tab" href="#responses-authCart-400-example-0">Response Example</a>
+                                  </li>
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                                <div class="tab-pane active" id="responses-authCart-400-schema">
+                                  <div id='responses-authCart-400-schema-400' style="padding: 30px; border-left: 1px solid #eee; border-right: 1px solid #eee; border-bottom: 1px solid #eee;">
+                                    <script>
+                                      $(document).ready(function() {
+                                        var schemaWrapper = {
+  "description" : "product not added to cart\"",
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/inline_response_200_1"
+      },
+      "example" : {
+        "status" : "error",
+        "message" : "failure"
+      }
+    }
+  }
+};
+                                        var schema = schemaWrapper.content["application/json"].schema;
+                                        if (schema.$ref != null) {
+                                          schema = defsParser.$refs.get(schema.$ref);
+                                        } else {
+                                          schemaWrapper.components = {};
+                                          schemaWrapper.components.schemas = Object.assign({}, defs);
+                                          $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                            console.log(err);
+                                          });
+                                        }
+
+                                        //console.log(JSON.stringify(schema));
+                                        var view = new JSONSchemaView(schema, 3);
+                                        $('#responses-authCart-400-schema-data').val(stringify(schema));
+                                        var result = $('#responses-authCart-400-schema-400');
+                                        result.empty();
+                                        result.append(view.render());
+                                      });
+                                    </script>
+                                  </div>
+                                  <input id='responses-authCart-400-schema-data' type='hidden' value=''></input>
+                                </div>
+                                  <div class="tab-pane" id="responses-authCart-400-example-0">
+                                      <pre class="prettyprint"><code class="json">{&quot;status&quot;:&quot;error&quot;,&quot;message&quot;:&quot;failure&quot;}</code></pre>
+                                </div>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
                     <div id="api-Cart-changeQuantity">
                       <article id="api-Cart-changeQuantity-0" data-group="User" data-name="changeQuantity" data-version="0">
                         <div class="pull-left">
@@ -4620,7 +5011,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X PATCH\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/cart/product/{id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/cart/product/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Cart-changeQuantity-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -4637,7 +5028,7 @@ public class CartApiExample {
         
         CartApi apiInstance = new CartApi();
         Body_7 body = {
-  "productId" : "1234",
+  "id" : "1234",
   "quantity" : 2
 }; // Body_7 | 
         String id = id_example; // String | id del prodotto da modificare
@@ -4662,7 +5053,7 @@ public class CartApiExample {
     public static void main(String[] args) {
         CartApi apiInstance = new CartApi();
         Body_7 body = {
-  "productId" : "1234",
+  "id" : "1234",
   "quantity" : 2
 }; // Body_7 | 
         String id = id_example; // String | id del prodotto da modificare
@@ -4684,7 +5075,7 @@ public class CartApiExample {
   </div> -->
                             <div class="tab-pane" id="examples-Cart-changeQuantity-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">Body_7 *body = {
-  "productId" : "1234",
+  "id" : "1234",
   "quantity" : 2
 }; // 
 String *id = id_example; // id del prodotto da modificare
@@ -4714,7 +5105,7 @@ CartApi *apiInstance = [[CartApi alloc] init];
 
 var api = new EmporioLambdaBe.CartApi()
 var body = {
-  "productId" : "1234",
+  "id" : "1234",
   "quantity" : 2
 }; // {{Body_7}} 
 var id = id_example; // {{String}} id del prodotto da modificare
@@ -4778,7 +5169,7 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiCartApi();
 $body = {
-  "productId" : "1234",
+  "id" : "1234",
   "quantity" : 2
 }; // Body_7 | 
 $id = id_example; // String | id del prodotto da modificare
@@ -4824,7 +5215,7 @@ from pprint import pprint
 # create an instance of the API class
 api_instance = swagger_client.CartApi()
 body = {
-  "productId" : "1234",
+  "id" : "1234",
   "quantity" : 2
 } # Body_7 | 
 id = id_example # String | id del prodotto da modificare
@@ -4934,7 +5325,7 @@ except ApiException as e:
         "$ref" : "#/components/schemas/body_7"
       },
       "example" : {
-        "productId" : "1234",
+        "id" : "1234",
         "quantity" : 2
       }
     }
@@ -5119,7 +5510,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Cart-deleteCart-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/cart"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/cart"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Cart-deleteCart-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -5506,7 +5897,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Cart-getCart-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/cart"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/cart"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Cart-getCart-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -5904,7 +6295,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Cart-removeFromCart-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/cart/product/{id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/cart/product/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Cart-removeFromCart-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -6333,7 +6724,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/categories"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/categories"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Categories-createCategory-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -6764,7 +7155,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Categories-getCategories-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/categories"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/categories"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Categories-getCategories-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -7047,7 +7438,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Categories-getCategory-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/categories/{id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/categories/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Categories-getCategory-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -7411,7 +7802,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Categories-removeCategory-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/categories/{id}?force="</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/categories/{id}?force="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Categories-removeCategory-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -7844,7 +8235,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X PATCH\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/categories/{id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/categories/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Categories-updateCategory-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -8320,7 +8711,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Checkout-cancelCheckout-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/checkout/{intent-id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/checkout/{intent-id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Checkout-cancelCheckout-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -8722,7 +9113,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Checkout-completeCheckout-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X PATCH\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/checkout/{intent-id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/checkout/{intent-id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Checkout-completeCheckout-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -9125,7 +9516,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/checkout"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/checkout"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Checkout-startCheckout-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -9589,7 +9980,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Orders-getOrderByID-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/orders/{id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/orders/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Orders-getOrderByID-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -10028,7 +10419,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Orders-getOrders-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/orders?status="</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/orders?status="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Orders-getOrders-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -10449,7 +10840,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Orders-refundOrderByID-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X PATCH\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/orders/{id}/refund"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/orders/{id}/refund"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Orders-refundOrderByID-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -10851,7 +11242,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Orders-updateOrderByID-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X PATCH\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/orders/{id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/orders/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Orders-updateOrderByID-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -11256,7 +11647,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Products-getPDP-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/products/{id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/products/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Products-getPDP-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -11630,7 +12021,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Products-getProducts-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/products?minPrice=&maxPrice=&category=&sorting=&search="</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/products?minPrice=&maxPrice=&category=&sorting=&search="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Products-getProducts-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -12122,7 +12513,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X PATCH\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/products/{id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/products/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Products-productsIdPatch-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -12140,7 +12531,9 @@ public class ProductsApiExample {
         ProductsApi apiInstance = new ProductsApi();
         Body_3 body = {
   "id" : "123VF",
-  "netPrice" : 8
+  "netPrice" : 8,
+  "primaryPhoto" : "base64,50m3Beaut1fulP1c==",
+  "secondaryPhotos" : [ "base64,50m3Beaut1fulP1c==", "base64,50m3Beaut1fulP1c==" ]
 }; // Body_3 | 
         String authorization = authorization_example; // String | token JWT
         String id = id_example; // String | 
@@ -12164,7 +12557,9 @@ public class ProductsApiExample {
         ProductsApi apiInstance = new ProductsApi();
         Body_3 body = {
   "id" : "123VF",
-  "netPrice" : 8
+  "netPrice" : 8,
+  "primaryPhoto" : "base64,50m3Beaut1fulP1c==",
+  "secondaryPhotos" : [ "base64,50m3Beaut1fulP1c==", "base64,50m3Beaut1fulP1c==" ]
 }; // Body_3 | 
         String authorization = authorization_example; // String | token JWT
         String id = id_example; // String | 
@@ -12185,7 +12580,9 @@ public class ProductsApiExample {
                             <div class="tab-pane" id="examples-Products-productsIdPatch-0-objc">
                               <pre class="prettyprint"><code class="language-cpp">Body_3 *body = {
   "id" : "123VF",
-  "netPrice" : 8
+  "netPrice" : 8,
+  "primaryPhoto" : "base64,50m3Beaut1fulP1c==",
+  "secondaryPhotos" : [ "base64,50m3Beaut1fulP1c==", "base64,50m3Beaut1fulP1c==" ]
 }; // 
 String *authorization = authorization_example; // token JWT
 String *id = id_example; // 
@@ -12213,7 +12610,9 @@ ProductsApi *apiInstance = [[ProductsApi alloc] init];
 var api = new EmporioLambdaBe.ProductsApi()
 var body = {
   "id" : "123VF",
-  "netPrice" : 8
+  "netPrice" : 8,
+  "primaryPhoto" : "base64,50m3Beaut1fulP1c==",
+  "secondaryPhotos" : [ "base64,50m3Beaut1fulP1c==", "base64,50m3Beaut1fulP1c==" ]
 }; // {{Body_3}} 
 var authorization = authorization_example; // {{String}} token JWT
 var id = id_example; // {{String}} 
@@ -12274,7 +12673,9 @@ require_once(__DIR__ . '/vendor/autoload.php');
 $api_instance = new Swagger\Client\ApiProductsApi();
 $body = {
   "id" : "123VF",
-  "netPrice" : 8
+  "netPrice" : 8,
+  "primaryPhoto" : "base64,50m3Beaut1fulP1c==",
+  "secondaryPhotos" : [ "base64,50m3Beaut1fulP1c==", "base64,50m3Beaut1fulP1c==" ]
 }; // Body_3 | 
 $authorization = authorization_example; // String | token JWT
 $id = id_example; // String | 
@@ -12318,7 +12719,9 @@ from pprint import pprint
 api_instance = swagger_client.ProductsApi()
 body = {
   "id" : "123VF",
-  "netPrice" : 8
+  "netPrice" : 8,
+  "primaryPhoto" : "base64,50m3Beaut1fulP1c==",
+  "secondaryPhotos" : [ "base64,50m3Beaut1fulP1c==", "base64,50m3Beaut1fulP1c==" ]
 } # Body_3 | 
 authorization = authorization_example # String | token JWT
 id = id_example # String | 
@@ -12411,7 +12814,9 @@ except ApiException as e:
       },
       "example" : {
         "id" : "123VF",
-        "netPrice" : 8
+        "netPrice" : 8,
+        "primaryPhoto" : "base64,50m3Beaut1fulP1c==",
+        "secondaryPhotos" : [ "base64,50m3Beaut1fulP1c==", "base64,50m3Beaut1fulP1c==" ]
       }
     }
   },
@@ -12596,7 +13001,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/products"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/products"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Products-productsPost-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -12616,10 +13021,10 @@ public class ProductsApiExample {
   "name" : "scarpe",
   "description" : "queste sono delle bellissime scarpe",
   "netPrice" : 50,
-  "tax" : 22,
+  "tax" : "1",
   "stock" : 5,
-  "primaryPhoto" : "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg",
-  "secondaryPhotos" : [ "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg", "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg" ]
+  "primaryPhoto" : "base64,idkS0m3th1ng1nbase64==",
+  "secondaryPhotos" : [ "base64,idkS0m3th1ng1nbase64==", "base64,idkS0m3th1ng1nbase64==" ]
 }; // Body_2 | 
         String authorization = authorization_example; // String | token JWT
         try {
@@ -12644,10 +13049,10 @@ public class ProductsApiExample {
   "name" : "scarpe",
   "description" : "queste sono delle bellissime scarpe",
   "netPrice" : 50,
-  "tax" : 22,
+  "tax" : "1",
   "stock" : 5,
-  "primaryPhoto" : "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg",
-  "secondaryPhotos" : [ "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg", "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg" ]
+  "primaryPhoto" : "base64,idkS0m3th1ng1nbase64==",
+  "secondaryPhotos" : [ "base64,idkS0m3th1ng1nbase64==", "base64,idkS0m3th1ng1nbase64==" ]
 }; // Body_2 | 
         String authorization = authorization_example; // String | token JWT
         try {
@@ -12669,10 +13074,10 @@ public class ProductsApiExample {
   "name" : "scarpe",
   "description" : "queste sono delle bellissime scarpe",
   "netPrice" : 50,
-  "tax" : 22,
+  "tax" : "1",
   "stock" : 5,
-  "primaryPhoto" : "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg",
-  "secondaryPhotos" : [ "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg", "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg" ]
+  "primaryPhoto" : "base64,idkS0m3th1ng1nbase64==",
+  "secondaryPhotos" : [ "base64,idkS0m3th1ng1nbase64==", "base64,idkS0m3th1ng1nbase64==" ]
 }; // 
 String *authorization = authorization_example; // token JWT
 
@@ -12700,10 +13105,10 @@ var body = {
   "name" : "scarpe",
   "description" : "queste sono delle bellissime scarpe",
   "netPrice" : 50,
-  "tax" : 22,
+  "tax" : "1",
   "stock" : 5,
-  "primaryPhoto" : "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg",
-  "secondaryPhotos" : [ "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg", "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg" ]
+  "primaryPhoto" : "base64,idkS0m3th1ng1nbase64==",
+  "secondaryPhotos" : [ "base64,idkS0m3th1ng1nbase64==", "base64,idkS0m3th1ng1nbase64==" ]
 }; // {{Body_2}} 
 var authorization = authorization_example; // {{String}} token JWT
 
@@ -12764,10 +13169,10 @@ $body = {
   "name" : "scarpe",
   "description" : "queste sono delle bellissime scarpe",
   "netPrice" : 50,
-  "tax" : 22,
+  "tax" : "1",
   "stock" : 5,
-  "primaryPhoto" : "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg",
-  "secondaryPhotos" : [ "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg", "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg" ]
+  "primaryPhoto" : "base64,idkS0m3th1ng1nbase64==",
+  "secondaryPhotos" : [ "base64,idkS0m3th1ng1nbase64==", "base64,idkS0m3th1ng1nbase64==" ]
 }; // Body_2 | 
 $authorization = authorization_example; // String | token JWT
 
@@ -12811,10 +13216,10 @@ body = {
   "name" : "scarpe",
   "description" : "queste sono delle bellissime scarpe",
   "netPrice" : 50,
-  "tax" : 22,
+  "tax" : "1",
   "stock" : 5,
-  "primaryPhoto" : "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg",
-  "secondaryPhotos" : [ "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg", "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg" ]
+  "primaryPhoto" : "base64,idkS0m3th1ng1nbase64==",
+  "secondaryPhotos" : [ "base64,idkS0m3th1ng1nbase64==", "base64,idkS0m3th1ng1nbase64==" ]
 } # Body_2 | 
 authorization = authorization_example # String | token JWT
 
@@ -12882,10 +13287,10 @@ except ApiException as e:
         "name" : "scarpe",
         "description" : "queste sono delle bellissime scarpe",
         "netPrice" : 50,
-        "tax" : 22,
+        "tax" : "1",
         "stock" : 5,
-        "primaryPhoto" : "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg",
-        "secondaryPhotos" : [ "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg", "https://www.focusjunior.it/content/uploads/site_stored/imgs/0003/033/paperino_01.jpg" ]
+        "primaryPhoto" : "base64,idkS0m3th1ng1nbase64==",
+        "secondaryPhotos" : [ "base64,idkS0m3th1ng1nbase64==", "base64,idkS0m3th1ng1nbase64==" ]
       }
     }
   },
@@ -13069,7 +13474,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Products-removeProduct-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/products/{id}?override="</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/products/{id}?override="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Products-removeProduct-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -13505,7 +13910,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X POST\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/taxes"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/taxes"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Taxes-createTax-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -13943,7 +14348,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Taxes-getTax-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/taxes/{id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/taxes/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Taxes-getTax-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -14308,7 +14713,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Taxes-getTaxes-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/taxes"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/taxes"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Taxes-getTaxes-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -14650,7 +15055,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Taxes-removeTax-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/taxes/{id}?override="</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/taxes/{id}?override="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Taxes-removeTax-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -15083,7 +15488,7 @@ except ApiException as e:
                            <pre class="prettyprint"><code class="language-bsh">curl -X PATCH\
 -H "Accept: application/json"\
 -H "Content-Type: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/taxes/{id}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/taxes/{id}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Taxes-updateTax-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -15559,7 +15964,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Users-checkJWT-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/users/check/{token}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/users/check/{token}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Users-checkJWT-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -15926,7 +16331,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Users-checkUserJWT-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/users/customers/check/{token}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/users/customers/check/{token}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Users-checkUserJWT-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -16292,7 +16697,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Users-checkUserJWT1-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/users/vendors/check/{token}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/users/vendors/check/{token}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Users-checkUserJWT1-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -16658,7 +17063,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Users-getCustomer-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/users/customers/{username}"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/users/customers/{username}"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Users-getCustomer-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
@@ -17079,7 +17484,7 @@ except ApiException as e:
                           <div class="tab-pane active" id="examples-Users-getCustomers-0-curl">
                            <pre class="prettyprint"><code class="language-bsh">curl -X GET\
 -H "Accept: application/json"\
-"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.1/users/customers"</code></pre>
+"https://virtserver.swaggerhub.com/swexception4/OpenAPI/0.4.2/users/customers"</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Users-getCustomers-0-java">
                             <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;

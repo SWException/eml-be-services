@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: EmporioLambda BE
   description: Queste sono le OpenAPI per EmporioLambda
-  version: 0.4.1
+  version: 0.4.2
 servers:
   # Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking
