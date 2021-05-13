@@ -1,28 +1,28 @@
 [submodule "categories"]
 	path = categories
 	url = git@github.com:SWException/categories.git
-    branch = develop
+    branch = main
 [submodule "orders"]
 	path = orders
 	url = git@github.com:SWException/orders.git
-    branch = develop
+    branch = main
 [submodule "users"]
 	path = users
 	url = git@github.com:SWException/users.git
-    branch = develop
+    branch = main
 [submodule "products"]
 	path = products
 	url = git@github.com:SWException/products.git
-    branch = develop
+    branch = main
 [submodule "addresses"]
 	path = addresses
 	url = git@github.com:SWException/addresses.git
-    branch = develop
+    branch = main
 [submodule "carts"]
 	path = carts
 	url = git@github.com:SWException/carts.git
-    branch = develop
+    branch = main
 [submodule "taxes"]
 	path = taxes
 	url = git@github.com:SWException/taxes.git
-    branch = develop
+    branch = main
